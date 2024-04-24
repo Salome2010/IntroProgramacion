@@ -1,0 +1,11 @@
+pertenece :: [Eq t] => t -> [t] -> Bool 
+pertenece _ [] = False 
+pertenece t (x:xs) | t==x = True
+                   | otheewise = pertenece t xs 
+
+--1) 
+relacionesVAlidas :: [(String,String)] -> Bool
+relacionesValidas [] = []
+relacionesVAlidas ((a,b): xs) | (a,b) pertenece xs = False 
+                              | (b,a) pertenece xs = False 
+                              
