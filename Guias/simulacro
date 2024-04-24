@@ -1,0 +1,27 @@
+pertenece :: [Eq t] => t -> [t] -> Bool 
+pertenece _ [] = False 
+pertenece t (x:xs) | t==x = True
+                   | otheewise = pertenece t xs 
+
+--1) 
+relacionesVAlidas :: [(String,String)] -> Bool
+relacionesValidas [] = True
+relacionesVAlidas ((a,b): xs) | pertenece (a,b) xs = False 
+                              | pertenece (b,a) xs = False 
+                              | a==b = False 
+                              | otherwise = relacionesValidas xs 
+
+--2) 
+personas :: [(String,String)] -> [String] 
+personas [] = [] 
+personas ((a,b):xs) | pertener a (personas xs) && pertenece b (personas xs) = personas xs 
+                    | pertenece a (personas xs) = b: personas xs 
+                    | b (personas xs) = a: personas xs 
+                    | otherwise = personas a:b: personas xs 
+
+amigosDe :: String -> [String,String] -> [String] 
+amigosDe _ [] = [] 
+amigoDe personas ((a,b):xs) | personas==a = b: amigosDe personas xs
+                            | persona==b = a: amigosDe personas xs 
+                            | otherwise = amigosDe personas xs 
+     
