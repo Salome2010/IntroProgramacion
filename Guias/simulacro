@@ -5,7 +5,7 @@ pertenece t (x:xs) | t==x = True
 
 --1) 
 relacionesVAlidas :: [(String,String)] -> Bool
-relacionesValidas [] = []
+relacionesValidas [] = True
 relacionesVAlidas ((a,b): xs) | pertenece (a,b) xs = False 
                               | pertenece (b,a) xs = False 
                               | a==b = False 
