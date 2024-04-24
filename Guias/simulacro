@@ -21,7 +21,7 @@ personas ((a,b):xs) | pertener a (personas xs) && pertenece b (personas xs) = pe
 
 amigosDe :: String -> [String,String] -> [String] 
 amigosDe _ [] = [] 
-amigoDe personas ((a,b):xs) | personas==a = b: personas xs
-                            | persona==b = a: personas xs 
+amigoDe personas ((a,b):xs) | personas==a = b: amigosDe personas xs
+                            | persona==b = a: amigosDe personas xs 
                             | otherwise = amigosDe personas xs 
      
