@@ -6,6 +6,22 @@ pertenece t (x:xs) | t==x = True
 --1) 
 relacionesVAlidas :: [(String,String)] -> Bool
 relacionesValidas [] = []
-relacionesVAlidas ((a,b): xs) | (a,b) pertenece xs = False 
-                              | (b,a) pertenece xs = False 
-                              
+relacionesVAlidas ((a,b): xs) | pertenece (a,b) xs = False 
+                              | pertenece (b,a) xs = False 
+                              | a==b = False 
+                              | otherwise = relacionesValidas xs 
+
+--2) 
+personas :: [(String,String)] -> [String] 
+personas [] = [] 
+personas ((a,b):xs) | pertener a (personas xs) && pertenece b (personas xs) = personas xs 
+                    | pertenece a (personas xs) = b: personas xs 
+                    | b (personas xs) = a: personas xs 
+                    | otherwise = personas a:b: personas xs 
+
+amigosDe :: String -> [String,String] -> [String] 
+amigosDe _ [] = [] 
+amigoDe personas ((a,b):xs) | personas==a = b: personas xs
+                            | persona==b = a: personas xs 
+                            | otherwise = amigosDe personas xs 
+     
