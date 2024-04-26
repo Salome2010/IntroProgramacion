@@ -46,7 +46,7 @@ pertenece x (y:ys) = x == y || pertenece x ys
 todosIguales :: (Eq t) => [t] -> Bool 
 todosIguales (x:xs)| longitud (x:xs) == 1 = True
                    | x == head xs = True && todosIguales xs
-                   | otherwise = False 
+                   | otherwise = False
 
 --c)
 todosDistintos :: (Eq t) => [t] -> Bool
@@ -93,7 +93,7 @@ capicua :: (Eq t) => [t] -> Bool
 capicua [] = True
 capicua (x:xs) | longitud xs == 0 = True 
                |x == (head (reverso xs)) = True && capicua (quitar x xs)
-               | otherwise = False
+               | otherwise = False 
 
 --Ejercicio 3 
 --a) 
