@@ -138,6 +138,108 @@ menosVotado ((candidato,vice):xs) (votos:ys) | (menosVotos (votos:ys) == votos) 
                               | otherwise = menosVotado xs ys
 
 
+--SIMULACRO 
+
+--1)
+relacionesValidas :: [(String, String)] -> Bool 
+relacionesValidas [] = True
+relacionesValidas (unaAmistad:masLista) = not (mismaPersona unaAmistad) && not (amistadRepetida unaAmistad masLista) && pasoRecursivo
+                                        where pasoRecursivo = relacionesValidas masLista
+
+mismaPersona:: (String, String) -> Bool
+mismaPersona (a,b) = a == b
+
+amistadRepetida :: (String, String) -> [(String, String)] -> Bool
+amistadRepetida _ [] = False
+amistadRepetida a (b:elResto) = mismaAmistad a b || amistadRepetida a elResto
+                                where mismaAmistad (a,b) (c,d) = (a==c && b == d) || (a==d && b == c) 
+
+{- COMO LO HICE YO:
+  relacionesValidas :: [(String,String)] -> Bool
+  relacionesValidas [] = True
+  relacionesValidas ((a,b):xs) | pertenece (a,b) xs = False
+                               | pertenece (b,a) xs = false
+                               | a==b = False
+                               | otherwise = relacionesValidas xs
+
+  pertenece :: Int -> [Int] -> Bool
+  pertenece _ [] = False
+  pertenece n ((a,b):xs) | n==a = True
+                         | otherwise = pertenece n xs 
+
+
+-}
+
+
+--2)
+personas :: [(String,String)] -> [String]
+personas rs = eliminarRepetidos (personasConRepes rs)
+
+personasConRepes :: [(String,String)] -> [String]
+personasConRepes [] = []
+personasConRepes ((p1,p2):rs) = p1 : p2 : personasConRepes rs
+
+eliminarRepetidos :: (Eq t) => [t] -> [t]
+eliminarRepetidos [] = []
+eliminarRepetidos (x:xs) = x:eliminarRepetidos (quitarTodos x xs)
+
+quitarTodos :: (Eq t ) => t -> [t] -> [t]
+quitarTodos _ [] = []
+quitarTodos e (x:xs) | e == x = quitarTodos e xs
+                    | otherwise = x:(quitarTodos e xs)
+
+{-
+personas :: [(String,String)] -> [String]
+personas [] = []
+personas ((a,b):xs) | pertenece a xs || pertenece b xs = personas xs
+                    | pertenece a xs = b: personas xs
+                    | pertenece b xs = a: personas xs 
+                    | otherwise = a:b: personas xs 
+
+
+
+-}
+
+--3)
+amigosDe :: String -> [(String, String)] -> [String] 
+amigosDe a [] = []
+amigosDe a ((p1,p2):elResto) 
+    | a == p1 = p2 : pasoRecursivo
+    | a == p2 = p1 : pasoRecursivo
+    | otherwise = pasoRecursivo 
+    where pasoRecursivo = amigosDe a elResto
+
+{-
+amigosDe :: String -> [(String, String)] -> [String] 
+amigosDe _ [] = []
+amigosDe persona ((a,b):xs) | persona==a = b: amigosDe persona xs 
+                            | persona== b = a: amigosDe persona xs 
+                            | otherwise = amigosDe persona xs 
+
+-}
+
+
+--4)
+personaConMasAmigos :: [(String, String)] -> String 
+personaConMasAmigos relaciones =  personaConMasAmigosAux personasDeRelacion (cantidadDeAmigosDePersonas personasDeRelacion relaciones) 
+                                    where personasDeRelacion = personas relaciones
+
+cantidadDeAmigosDePersonas :: [String] -> [(String, String)] -> [Int]
+cantidadDeAmigosDePersonas [] _ = []
+cantidadDeAmigosDePersonas (p1:ps) relaciones = longitud (amigosDe p1 relaciones) : pasoRecursivo
+                                                where pasoRecursivo = cantidadDeAmigosDePersonas ps relaciones
+
+longitud :: [t] -> Int
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
+
+personaConMasAmigosAux :: [String] -> [Int] -> String
+personaConMasAmigosAux [p1] _ = p1
+personaConMasAmigosAux (p1:p2:ps) (c1:c2:cs) | c1 > c2 = personaConMasAmigosAux (p1:ps) (c1:cs)
+                                             | otherwise = personaConMasAmigosAux (p2:ps) (c2:cs)
+
+
+
                               
 
 
