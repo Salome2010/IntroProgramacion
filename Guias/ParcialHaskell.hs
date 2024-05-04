@@ -1,6 +1,6 @@
 module ParcialHaskell where 
 
--- PARCIAL SEG. CUATRIMESTRE 2023
+-------------------------PARCIAL SEG. CUATRIMESTRE 2023----------------
 --1)
 atajaronSuplentes :: [(String,String)] -> [Int] -> Int -> Int
 atajaronSuplentes _ goles totalDeGolesTorneo = totalDeGolesTorneo - golesDeTitulares goles
@@ -31,7 +31,7 @@ golesDeArquero arquero ((equipo,nombre):xs) (goles:ys)  | nombre == arquero = go
                                               | otherwise = golesDeArquero arquero xs ys 
 
 --4) 
-menosGoles :: [Int] -> Int
+{-menosGoles :: [Int] -> Int
 menosGoles [x] = x
 menosGoles (x:y:xs) | x <= y = menosGoles (x:xs)
                     | otherwise = menosGoles (y:xs)
@@ -39,8 +39,14 @@ menosGoles (x:y:xs) | x <= y = menosGoles (x:xs)
 vallaMenosVencida :: [(String, String)] -> [Int] -> String
 vallaMenosVencida ((equipo,nombre):xs) (goles:ys) | (menosGoles (goles:ys) == goles) = nombre
                               | otherwise = vallaMenosVencida xs ys
+-}
+vallaMenosVencida :: [(String, String)] -> [Int] -> String
+vallaMenosVencida [(_,j)] [_] = j
+vallaMenosVencida (x:x2:xs) (y:y2:ys) | y>y2 = vallaMenosVencida (x2:xs) (y2:ys)
+                                      | otherwise = vallaMenosVencida (x:xs) (y:ys)
 
---PARCIAL 25/08/2023
+
+---------------------PARCIAL 25/08/2023--------------------
 
 --1)
 --Funcion auxiliar para el ejercicio 1
@@ -75,24 +81,23 @@ cantidadDeVotos presidente ((candidato,vice):xs) (votos:ys)  | candidato == pres
                                               | otherwise = cantidadDeVotos presidente xs ys 
 
 --4)
+proximoPresidente :: [(String,String)] -> [Int] -> String
+proximoPresidente [(j,_)] [_] = j 
+proximoPresidente (x:x1:xs) (y:y1:ys) | y>y1 = proximoPresidente (x:xs) (y:ys)
+                                      | otherwise = proximoPresidente (x1:xs) (y1:ys) 
 
--- 25/08
+-------------------------------- 25/08--------------------
 
 --1) 
-{-porcentajeDeVotosAfirmativos :: [(String,String)] -> [Integer] -> Integer -> Float
-porcentajeDeVotosAfirmativos formula votos cantTotalVotos = (division (votosAceptados votos) cantTotalVotos) * 100 
+porcentajeDeVotosAfirmativos :: [(String, String)] -> [Int] -> Int -> Float
+porcentajeDeVotosAfirmativos _ votos cantTotalVotos = (division (sumaVotosAfirmativos votos) cantTotalVotos) * 100
 
-division :: Integer -> Integer -> Float
-division a b = (fromIntegral a) / (fromIntegral b)  
-
-
-votosAceptados :: [Integer] -> Integer
-votosAceptados [] = 0
-votosAceptados (x:xs) = x: votosAceptados xs 
--}
+sumaVotosAfirmativos :: [Int] -> Int
+sumaVotosAfirmativos [] = 0
+sumaVotosAfirmativos (x:xs) = x + sumaVotosAfirmativos xs
 
 --2)
-formulasInvalidas :: [(String,String)] -> Bool
+{-formulasInvalidas :: [(String,String)] -> Bool
 formulasInvalidas [] = False 
 formulasInvalidas ((x,y):xs) = formulasNoAcep && formulasInvalidas xs 
  where formulasNoAcep = (elem x(formulasInvalidasAux xs)) && (elem y(formulasInvalidasAux xs))
@@ -100,45 +105,44 @@ formulasInvalidas ((x,y):xs) = formulasNoAcep && formulasInvalidas xs
 formulasInvalidasAux :: [(String,String)] -> [String]
 formulasInvalidasAux [] = []
 formulasInvalidasAux ((x,y):xs) = x: y: formulasInvalidasAux xs  
+-}
 
-{- TAMBIEN SE PUEDE RESOLVER ASI 
 pertenece :: (Eq t) => t -> [t] -> Bool
 pertenece _ [] = False
 pertenece n (x:xs) | n == x = True
                    | otherwise = pertenece n xs
 
-listaFormulas :: [(String, String)] -> [String]
-listaFormulas [] = []
-listaFormulas ((x,y):xs) = x : y : listaFormulas xs
-
 formulasInvalidas :: [(String, String)] -> Bool
 formulasInvalidas [] = False
-formulasInvalidas ((x,y):xs) | x == y || pertenece x (listaFormulas xs) || pertenece y (listaFormulas xs) = True
+formulasInvalidas ((x,y):xs) | pertenece (x,y) xs = True
+                             | pertenece (y,x) xs = True
+                             | pertenece x (listaDeFormulas xs) = True
+                             | pertenece y (listaDeFormulas xs) = True
+                             | x==y = True
                              | otherwise = formulasInvalidas xs
--}
+
+listaDeFormulas :: [(String,String)] -> [String]
+listaDeFormulas [] = []
+listaDeFormulas ((x,y):xs) = x:y: listaDeFormulas xs 
+
 
 --3) 
-{- 
-porcentajeDeVotos2 :: [String] -> [(String,String)] -> [Int] -> Float
-porcentajeDeVotos2 vice formula votos = division((porcentajeVice vice formula votos)*100) && (votosValidosAux votos)
 
-porcentajeVice :: [String] -> [(String,String)] -> [Int] -> Int
-porcentajeVice vice ((candidato1,candidato2):xs) (votos:ys) | vice == candidato2 = votos
-                                                            | otherwise = porcentajeVice xs ys 
--}
+porcentajeDeVotos2 :: String -> [(String,String)] -> [Int] -> Float
+porcentajeDeVotos2 vice formula votos = (division( votosVice vice formula votos) (sumaVotosAfirmativos votos))*100
+
+votosVice :: String -> [(String,String)] -> [Int] -> Int
+votosVice vice ((candidato,candVice):xs) (votos:ys) | candVice==vice  = votos
+                                                    | otherwise = votosVice vice xs ys 
+
 
 --4)
-menosVotos :: [Int] -> Int
-menosVotos [x] = x
-menosVotos (x:y:xs) | x <= y = menosVotos (x:xs)
-                    | otherwise = menosVotos (y:xs)
-
 menosVotado :: [(String, String)] -> [Int] -> String
-menosVotado ((candidato,vice):xs) (votos:ys) | (menosVotos (votos:ys) == votos) = candidato
-                              | otherwise = menosVotado xs ys
+menosVotado [(j,_)] [_] = j
+menosVotado (x:x1:xs) (y:y1:ys) | y>y1 = menosVotado (x1:xs) (y1:ys)
+                                | otherwise = menosVotado (x:xs) (y:ys)
 
-
---SIMULACRO 
+-------------------------------SIMULACRO-------------------- 
 
 --1)
 relacionesValidas :: [(String, String)] -> Bool 
@@ -238,6 +242,59 @@ personaConMasAmigosAux [p1] _ = p1
 personaConMasAmigosAux (p1:p2:ps) (c1:c2:cs) | c1 > c2 = personaConMasAmigosAux (p1:ps) (c1:cs)
                                              | otherwise = personaConMasAmigosAux (p2:ps) (c2:cs)
 
-                              
 
+-------------------------PARCISL HECHO EN CLASE 02/05-----------------
+
+--1)
+golesDeNoGoleadores :: [(String,String)] -> [Int] -> Int -> Int 
+golesDeNoGoleadores _ goles totslGolesTorneo = totslGolesTorneo - goleadoresDelEquipo goles 
+
+goleadoresDelEquipo :: [Int] -> Int
+goleadoresDelEquipo [] = 0
+goleadoresDelEquipo (x:xs) = x + goleadoresDelEquipo xs 
+
+--2) ya lo hice en otro ej
+{-equiposValidos :: [(String,String)] -> Bool
+equiposValidos [] = True
+equiposValidos ((a,b):xs) = equiposAcep && equiposValidos xs
+  where equiposAcep = not(elen a(equiposValidosAux xs)) && not(elem b(equiposValidosAux xs))
+
+equiposValidosAux :: [(String,String)] -> [String]
+equiposValidosAux [] = []
+equiposValidosAux ((a,b):xs) = a:b: equiposValidosAux xs 
+
+-------------haciendo con pertenece:----------
+
+pertenece :: Int -> [Int] -> Bool
+petenece a [] = False
+pertenece a (x:xs) | a==x = True
+                   | otherwise = pertenece a xs
+
+equiposValidos :: [(String,String)] -> Bool
+equiposValidos [] = True
+equiposValidos ((a,b):xs) | pertenece (a,b) xs = False
+                          | pertenece (b,a) xs = False
+                          | a==b = False
+                          | otherwise = equiposValidos xs 
+
+
+
+
+
+-}
+
+--3) tambien es otro ej 
+{-porcentajeDeGoles :: String -> [(String,String)] -> [Int] -> Float
+porcentajeDeGoles goleador goleadoresPorEquipo goles = div((porcentajeGoleador goleador goleadoresDelEquipo goles)*100) (goleadoresDelEquipo goles)
+                              
+porcentajeGoleador :: String -> [(String,String)] -> [Int] -> Int
+porcentajeGoleador goleador ((equipo,nombre):xs) (goles:ys) | nombre==goleador = goles 
+                                                            | otherwise = porcentajeGoleador goleados xs ys 
+-}
+
+--4) 
+botinDeOro :: [(String,String)] -> [Int] -> String
+botinDeOro [(_,j)] [_]= j
+botinDeOro (x:x1:xs) (y:y1:ys) | y>y1 = botinDeOro (x:xs) (y:ys)
+                               | otherwise = botinDeOro (x1:xs) (y1:ys)  
 
