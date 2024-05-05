@@ -176,6 +176,8 @@ amistadRepetida a (b:elResto) = mismaAmistad a b || amistadRepetida a elResto
 
 
 --2)
+{-
+
 personas :: [(String,String)] -> [String]
 personas rs = eliminarRepetidos (personasConRepes rs)
 
@@ -192,19 +194,27 @@ quitarTodos _ [] = []
 quitarTodos e (x:xs) | e == x = quitarTodos e xs
                     | otherwise = x:(quitarTodos e xs)
 
-{-
-personas :: [(String,String)] -> [String]
-personas [] = []
-personas ((a,b):xs) | pertenece a xs || pertenece b xs = personas xs
-                    | pertenece a xs = b: personas xs
-                    | pertenece b xs = a: personas xs 
-                    | otherwise = a:b: personas xs 
-
-
-
 -}
 
+
+
+personas :: [(String,String)] -> [String]
+personas [] = []
+personas ((a,b):xs) | pertenece a (listasPersonas xs) && pertenece b (listasPersonas xs) = personas xs
+                    | pertenece a  (listasPersonas xs)= b: personas xs
+                    | pertenece b (listasPersonas xs) = a: personas xs 
+                    | otherwise = a:b: personas xs 
+
+listasPersonas :: [(String,String)] -> [String]
+listasPersonas [] = []
+listasPersonas ((a,b):xs) = a:b: listasPersonas xs 
+
+
+
 --3)
+
+{-
+
 amigosDe :: String -> [(String, String)] -> [String] 
 amigosDe a [] = []
 amigosDe a ((p1,p2):elResto) 
@@ -213,18 +223,20 @@ amigosDe a ((p1,p2):elResto)
     | otherwise = pasoRecursivo 
     where pasoRecursivo = amigosDe a elResto
 
-{-
-amigosDe :: String -> [(String, String)] -> [String] 
-amigosDe _ [] = []
-amigosDe persona ((a,b):xs) | persona==a = b: amigosDe persona xs 
-                            | persona== b = a: amigosDe persona xs 
-                            | otherwise = amigosDe persona xs 
-
 -}
 
 
+amigosDe :: String -> [(String, String)] -> [String] 
+amigosDe _ [] = []
+amigosDe p ((a,b):xs) | a==p = b: amigosDe p xs 
+                      | b==p = a: amigosDe p xs 
+                      | otherwise = amigosDe p xs 
+
+
+
+
 --4)
-personaConMasAmigos :: [(String, String)] -> String 
+{-personaConMasAmigos :: [(String, String)] -> String 
 personaConMasAmigos relaciones =  personaConMasAmigosAux personasDeRelacion (cantidadDeAmigosDePersonas personasDeRelacion relaciones) 
                                     where personasDeRelacion = personas relaciones
 
@@ -242,16 +254,16 @@ personaConMasAmigosAux [p1] _ = p1
 personaConMasAmigosAux (p1:p2:ps) (c1:c2:cs) | c1 > c2 = personaConMasAmigosAux (p1:ps) (c1:cs)
                                              | otherwise = personaConMasAmigosAux (p2:ps) (c2:cs)
 
-
+-}
 -------------------------PARCISL HECHO EN CLASE 02/05-----------------
 
 --1)
 golesDeNoGoleadores :: [(String,String)] -> [Int] -> Int -> Int 
-golesDeNoGoleadores _ goles totslGolesTorneo = totslGolesTorneo - goleadoresDelEquipo goles 
+golesDeNoGoleadores _ goles totslGolesTorneo = totslGolesTorneo - sumaGolesDeGoleadores goles 
 
-goleadoresDelEquipo :: [Int] -> Int
-goleadoresDelEquipo [] = 0
-goleadoresDelEquipo (x:xs) = x + goleadoresDelEquipo xs 
+sumaGolesDeGoleadores :: [Int] -> Int
+sumaGolesDeGoleadores [] = 0
+sumaGolesDeGoleadores (x:xs) = x + sumaGolesDeGoleadores xs 
 
 --2) ya lo hice en otro ej
 {-equiposValidos :: [(String,String)] -> Bool
@@ -284,17 +296,18 @@ equiposValidos ((a,b):xs) | pertenece (a,b) xs = False
 -}
 
 --3) tambien es otro ej 
-{-porcentajeDeGoles :: String -> [(String,String)] -> [Int] -> Float
-porcentajeDeGoles goleador goleadoresPorEquipo goles = div((porcentajeGoleador goleador goleadoresDelEquipo goles)*100) (goleadoresDelEquipo goles)
-                              
-porcentajeGoleador :: String -> [(String,String)] -> [Int] -> Int
-porcentajeGoleador goleador ((equipo,nombre):xs) (goles:ys) | nombre==goleador = goles 
-                                                            | otherwise = porcentajeGoleador goleados xs ys 
--}
+porcentajeDeGoless :: String -> [(String,String)] -> [Int] -> Float
+porcentajeDeGoless goleador goleadoresPorEquipo goles = (division(golesGoleador goleador goleadoresPorEquipo goles) (sumaGolesDeGoleadores goles))*100
+
+golesGoleador :: String -> [(String,String)] -> [Int] -> Int
+golesGoleador goleador ((equipo,nombre):xs) (goles:ys) | nombre==goleador = goles 
+                                                            | otherwise = golesGoleador goleador xs ys 
+
 
 --4) 
 botinDeOro :: [(String,String)] -> [Int] -> String
 botinDeOro [(_,j)] [_]= j
 botinDeOro (x:x1:xs) (y:y1:ys) | y>y1 = botinDeOro (x:xs) (y:ys)
                                | otherwise = botinDeOro (x1:xs) (y1:ys)  
+
 
