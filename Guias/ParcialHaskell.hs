@@ -23,7 +23,8 @@ equiposValidosAux ((x, y):xs) = x : y : equiposValidosAux xs
 
 --3) 
 porcentajeDeGoles :: String -> [(String,String)] -> [Int] -> Float
-porcentajeDeGoles arquero arqueroPorEquipo goles = division ((golesDeArquero arquero arqueroPorEquipo goles)*100) (golesDeTitulares goles)
+porcentajeDeGoles arquero arqueroPorEquipo goles = (division (golesDeArquero arquero arqueroPorEquipo goles) (golesDeTitulares goles))*100
+
 
 
 golesDeArquero :: String -> [(String,String)] -> [Int] -> Int
@@ -129,7 +130,7 @@ listaDeFormulas ((x,y):xs) = x:y: listaDeFormulas xs
 --3) 
 
 porcentajeDeVotos2 :: String -> [(String,String)] -> [Int] -> Float
-porcentajeDeVotos2 vice formula votos = (division( votosVice vice formula votos) (sumaVotosAfirmativos votos))*100
+porcentajeDeVotos2 vice formula votos = division( votosVice vice formula votos) (sumaVotosAfirmativos votos)*100
 
 votosVice :: String -> [(String,String)] -> [Int] -> Int
 votosVice vice ((candidato,candVice):xs) (votos:ys) | candVice==vice  = votos
@@ -311,3 +312,37 @@ botinDeOro (x:x1:xs) (y:y1:ys) | y>y1 = botinDeOro (x:xs) (y:ys)
                                | otherwise = botinDeOro (x1:xs) (y1:ys)  
 
 
+------------ parcial 06/05 ------------
+
+--1) 
+hayQueCodificar :: Char -> [(Char,Char)] -> Bool 
+hayQueCodificar c [] = False
+hayQueCodificar c ((a,_):xs) | c==a = True
+                             | otherwise = hayQueCodificar c xs 
+
+--2) 
+cuantasVecesHayQueCodificar :: Char -> [Char] -> [(Char, Char)] -> Int 
+cuantasVecesHayQueCodificar _ [] _ = 0 
+cuantasVecesHayQueCodificar c (x:xs) mapeo  | not (hayQueCodificar c mapeo) = 0 
+                                            | c == x = 1 + cuantasVecesHayQueCodificar c xs mapeo
+                                            | otherwise = cuantasVecesHayQueCodificar c xs mapeo
+
+--3)
+laQueMasHayQueCodificar :: [Char] -> [(Char, Char)] -> Char
+laQueMasHayQueCodificar (x:xs) mapeo = maxByVecesAReemplazar x xs mapeo
+
+maxByVecesAReemplazar :: Char -> [Char] -> [(Char, Char)] -> Char
+maxByVecesAReemplazar c [] _ = c
+maxByVecesAReemplazar c (x:xs) mapeo
+    | cuantasVecesHayQueCodificar c (x:xs) mapeo >= cuantasVecesHayQueCodificar x (x:xs) mapeo = maxByVecesAReemplazar c xs mapeo
+    | otherwise = maxByVecesAReemplazar x xs mapeo
+
+--4) 
+codificarFrase :: [Char] -> [(Char,Char)] -> [Char]
+codificarFrase [] _ = []
+codificarFrase (x:xs) mapeo | hayQueCodificar x mapeo = buscoRemplazo x mapeo : codificarFrase xs mapeo 
+                            | otherwise = x: codificarFrase xs mapeo 
+
+buscoRemplazo :: Char -> [(Char,Char)] -> Char
+buscoRemplazo caracter ((a,remplazo):ys) | caracter==a = remplazo 
+                                         | otherwise = buscoRemplazo caracter ys 
