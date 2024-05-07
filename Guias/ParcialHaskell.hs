@@ -130,7 +130,7 @@ listaDeFormulas ((x,y):xs) = x:y: listaDeFormulas xs
 --3) 
 
 porcentajeDeVotos2 :: String -> [(String,String)] -> [Int] -> Float
-porcentajeDeVotos2 vice formula votos = division( votosVice vice formula votos) (sumaVotosAfirmativos votos)*100
+porcentajeDeVotos2 vice formula votos = (division( votosVice vice formula votos) (sumaVotosAfirmativos votos))*100
 
 votosVice :: String -> [(String,String)] -> [Int] -> Int
 votosVice vice ((candidato,candVice):xs) (votos:ys) | candVice==vice  = votos
@@ -321,21 +321,22 @@ hayQueCodificar c ((a,_):xs) | c==a = True
                              | otherwise = hayQueCodificar c xs 
 
 --2) 
+
 cuantasVecesHayQueCodificar :: Char -> [Char] -> [(Char, Char)] -> Int 
 cuantasVecesHayQueCodificar _ [] _ = 0 
 cuantasVecesHayQueCodificar c (x:xs) mapeo  | not (hayQueCodificar c mapeo) = 0 
                                             | c == x = 1 + cuantasVecesHayQueCodificar c xs mapeo
-                                            | otherwise = cuantasVecesHayQueCodificar c xs mapeo
+                                            | otherwise = cuantasVecesHayQueCodificar c xs mapeo 
 
 --3)
 laQueMasHayQueCodificar :: [Char] -> [(Char, Char)] -> Char
-laQueMasHayQueCodificar (x:xs) mapeo = maxByVecesAReemplazar x xs mapeo
+laQueMasHayQueCodificar (x:xs) mapeo = laQueMasHayQueCodificarAux x xs mapeo
 
-maxByVecesAReemplazar :: Char -> [Char] -> [(Char, Char)] -> Char
-maxByVecesAReemplazar c [] _ = c
-maxByVecesAReemplazar c (x:xs) mapeo
-    | cuantasVecesHayQueCodificar c (x:xs) mapeo >= cuantasVecesHayQueCodificar x (x:xs) mapeo = maxByVecesAReemplazar c xs mapeo
-    | otherwise = maxByVecesAReemplazar x xs mapeo
+laQueMasHayQueCodificarAux :: Char -> [Char] -> [(Char, Char)] -> Char
+laQueMasHayQueCodificarAux c [] _ = c
+laQueMasHayQueCodificarAux c (x:xs) mapeo
+    | cuantasVecesHayQueCodificar c (x:xs) mapeo >= cuantasVecesHayQueCodificar x (x:xs) mapeo = laQueMasHayQueCodificarAux c xs mapeo
+    | otherwise = laQueMasHayQueCodificarAux x xs mapeo
 
 --4) 
 codificarFrase :: [Char] -> [(Char,Char)] -> [Char]
@@ -346,3 +347,50 @@ codificarFrase (x:xs) mapeo | hayQueCodificar x mapeo = buscoRemplazo x mapeo : 
 buscoRemplazo :: Char -> [(Char,Char)] -> Char
 buscoRemplazo caracter ((a,remplazo):ys) | caracter==a = remplazo 
                                          | otherwise = buscoRemplazo caracter ys 
+
+
+---------------- otro parcial 06/05-------------
+
+--1)
+aprobaronMasDeNMaterias :: [([Char],[Int])] -> [Char] -> Int -> Bool 
+aprobaronMasDeNMaterias [] _ _ = False
+aprobaronMasDeNMaterias ((nombre,notas):xs) alumno n | nombre==alumno = notasMayoresIguales4 notas>n 
+                                                     | otherwise = aprobaronMasDeNMaterias xs alumno n 
+
+
+notasMayoresIguales4 :: [Int] -> Int 
+notasMayoresIguales4 [] = 0 
+notasMayoresIguales4 (x:xs) | x>=4 = 1 + notasMayoresIguales4 xs
+                            | otherwise = notasMayoresIguales4 xs 
+
+--2) 
+buenosAlumnos :: [([Char],[Int])] -> [[Char]] 
+buenosAlumnos [] = []
+buenosAlumnos ((nombre,notas):xs) | promedioDeNotas notas >= 8 && notasMayoresIguales4 notas /=0 = nombre: buenosAlumnos xs 
+                                  | otherwise = buenosAlumnos xs 
+
+promedioDeNotas :: [Int] -> Float 
+promedioDeNotas [] = 0.0 
+promedioDeNotas notas = fromIntegral (sumaDeNotas notas) / fromIntegral (cantidadDeNotas notas)
+
+sumaDeNotas :: [Int] -> Int
+sumaDeNotas [x] = x
+sumaDeNotas (x:xs) = x + sumaDeNotas xs 
+
+cantidadDeNotas :: [Int] -> Int
+cantidadDeNotas [] = 0
+cantidadDeNotas (x:xs) = 1 + cantidadDeNotas xs 
+
+--3)
+mejorPromedio :: [([Char],[Int])] -> [Char]
+mejorPromedio [(j,_)] = j
+mejorPromedio ((nombre1,notas1):(nombre2,notas2):xs) | promedioDeNotas notas1 >= promedioDeNotas notas2 = mejorPromedio((nombre1,notas1):xs)
+                                                     | otherwise = mejorPromedio((nombre2,notas2):xs)
+
+--4) 
+seGraduoConHonores :: [([Char],[Int])] -> Int -> [Char] -> Bool
+seGraduoConHonores reguistro cantidadDeMateriasDeLaCarrera alumno = aprobaronMasDeNMaterias reguistro alumno (cantidadDeMateriasDeLaCarrera -1) 
+                                                                    && pertenece alumno (buenosAlumnos reguistro) 
+                                                                 -- && promedioDeNotas () 
+
+      
