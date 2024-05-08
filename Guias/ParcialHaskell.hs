@@ -23,7 +23,7 @@ equiposValidosAux ((x, y):xs) = x : y : equiposValidosAux xs
 
 --3) 
 porcentajeDeGoles :: String -> [(String,String)] -> [Int] -> Float
-porcentajeDeGoles arquero arqueroPorEquipo goles = (division (golesDeArquero arquero arqueroPorEquipo goles) (golesDeTitulares goles))*100
+porcentajeDeGoles arquero arqueroPorEquipo goles = (fromIntegral(golesDeArquero arquero arqueroPorEquipo goles) / fromIntegral(golesDeTitulares goles))*100
 
 
 
