@@ -394,3 +394,8 @@ seGraduoConHonores reguistro cantidadDeMateriasDeLaCarrera alumno = aprobaronMas
                                                                  -- && promedioDeNotas () 
 
       
+stockDeProducto :: [([Char], Int)] -> [Char] -> Int
+stockDeProducto [(_,j)] [_] = j 
+stockDeProducto ((nom1,cant1):(nom2,cant2):xs) producto | nom1 /= producto = 0
+                                                        | nom2/= producto = 0 
+                                                        
