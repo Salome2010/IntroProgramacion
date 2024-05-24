@@ -8,7 +8,7 @@ import Data.Char
 -- Completar!
 -- Nombre de grupo: {Haskell (Taylor´s Version)}
 -- Integrante1: { 45.753.027, Camila Nohara Arakaki}
--- Integrante2: { DNI2,apellidoYNombre2}
+-- Integrante2: { 44.552.675, Anahi Salome Vera
 -- Integrante3: { DNI3,apellidoYNombre3}
 -- Integrante4: { DNI4,apellidoYNombre4}
 -- Integrantes que abandonaron la materia: {En caso que haya abandonado la materia algún
@@ -147,48 +147,49 @@ esDescifradoAux (x:xs) (y:ys) n | (y:ys) == cifrar (x:xs) n = True
 
 -- ejercicio 10 
 todosLosDescifrados :: [String] -> [(String, String)]
-todosLosDescifrados [] = []
-todosLosDescifrados [x] = []
-todosLosDescifrados (x:xs) | hayCifrado x (x:xs) == True = todosLosDescifradosAux x (x:xs) ++ (todosLosDescifrados xs)
+todosLosDescifrados [] = [] 
+todosLosDescifrados [x] | noHayMinusculas x == True = [(x,x)]
+                        | otherwise = []
+todosLosDescifrados (x:xs) | noHayMinusculas x == True = [(x,x)]++(todosLosDescifrados xs)
+                           | hayCifrado x (x:xs) == True = formarTuplasDeDescifrados x (x:xs) ++ (todosLosDescifrados xs)
                            | otherwise = todosLosDescifrados xs
 
-descifradoNEnLista :: String -> [String] -> Int -> Bool 
-descifradoNEnLista _ _ 26 = False 
-descifradoNEnLista _ [] _ = False
-descifradoNEnLista x (y:ys) n | cifrar x n == y = True  
-                              | otherwise = descifradoNEnLista x ys n 
-
-cualquierDescifradoEnLista :: String -> [String] -> Int -> Bool 
-cualquierDescifradoEnLista _ _ 26 = False
-cualquierDescifradoEnLista x (y:ys) n | descifradoNEnLista x (y:ys) n == True = True 
-                                      | otherwise = descifradoNEnLista x (y:ys) (n+1)
-
-todosLosDescifradosAux :: String -> [String] -> [(String,String)]
-todosLosDescifradosAux x (y:ys) | hayMasDeUnCifrado x (y:ys) = (x,(buscarCifrado x (y:ys))) : [((buscarCifrado x (y:ys)),x)] ++ (todosLosDescifradosAux x (quitarCifrado x (y:ys)))
-                                | cualquierDescifradoEnLista x (y:ys) 0 == True = (x, (buscarCifrado x (y:ys))) : [((buscarCifrado x (y:ys)),x)]
-                                | otherwise = []
+formarTuplasDeDescifrados :: String -> [String] -> [(String,String)]
+formarTuplasDeDescifrados x (y:ys) | hayMasDeUnCifrado x (y:ys) = [(x,(buscarCifrado x (y:ys))),((buscarCifrado x (y:ys)),x)] ++ (formarTuplasDeDescifrados x (quitarCifrado x (y:ys)))
+                                   | hayCifrado x (y:ys) == True = (x, (buscarCifrado x (y:ys))) : [((buscarCifrado x (y:ys)),x)]
+                                   | otherwise = []
 
 hayCifrado :: String -> [String] -> Bool 
 hayCifrado _ [] = False
-hayCifrado x (y:ys) | esDescifradoAux x y 1 == True = True 
+hayCifrado x (y:ys) | noHayMinusculasEnLista (y:ys) == True && noHayMinusculas x == False = False
+                    | esDescifradoAux x y 1 == True = True 
                     | otherwise = hayCifrado x ys
 
 hayMasDeUnCifrado :: String -> [String] -> Bool
 hayMasDeUnCifrado _ [] = False
-hayMasDeUnCifrado x (y:ys) | hayCifrado x (y:ys) == False = False 
-                           | hayCifrado x (y:ys) == True && hayCifrado x (quitarCifrado x (y:ys)) == False = False
+hayMasDeUnCifrado x (y:ys) | hayCifrado x (y:ys) == False = False
+                           | hayCifrado x (quitarCifrado x (y:ys)) == False = False
                            | otherwise = True
 
 quitarCifrado :: String -> [String] -> [String]
 quitarCifrado _ [] = []
 quitarCifrado x (y:ys) | hayCifrado x (y:ys) == False = (y:ys)
-                       | esDescifrado x y = ys 
+                       | esDescifrado x y && x /= y= ys 
                        | otherwise = y : (quitarCifrado x ys)
 
 buscarCifrado :: String -> [String] -> String 
 buscarCifrado x (y:ys) | esDescifradoAux x y 1 == True = y
                        | otherwise = buscarCifrado x ys
 
+noHayMinusculas :: String -> Bool
+noHayMinusculas [] = True
+noHayMinusculas (x:xs) | esMinuscula x == True = False
+                       | otherwise = noHayMinusculas xs 
+
+noHayMinusculasEnLista :: [String] -> Bool
+noHayMinusculasEnLista [] = True
+noHayMinusculasEnLista (x:xs) | noHayMinusculas x == False = False 
+                              | otherwise = noHayMinusculasEnLista xs
 
 
 
@@ -212,11 +213,17 @@ obtenerCaracter clave posicion = clave !! (posicion `mod` length clave)
 
 --- ejercicio 12
 
-cifrarVigenere :: String -> String -> String
+{-cifrarVigenere :: String -> String -> String
 cifrarVigenere [] _ = []
 cifrarVigenere _ [] = []
 cifrarVigenere (x:xs) (y:ys) = (codificar x y) : cifrarVigenere xs (ys ++ [y])
+-}
+cifrarVigenere :: String -> String -> String
+cifrarVigenere mensaje clave = cifrarVigenereAux mensaje (cycle clave)
 
+cifrarVigenereAux :: String -> String -> String
+cifrarVigenereAux [] _ = []
+cifrarVigenereAux (x:xs) (y:ys) = codificar x y : cifrarVigenereAux xs ys
 codificar :: Char -> Char -> Char
 codificar a b = chr (97 + mod (ord a + ord b - 2 * ord 'a') 26) --por ASCII
 
@@ -262,3 +269,12 @@ agregarSiCoincide :: String -> String -> String -> [(String, String)] -> [(Strin
 agregarSiCoincide mensaje clave cifradoCorrecto tupla
   | cifrarVigenere mensaje clave == cifradoCorrecto = (mensaje, clave) : tupla
   | otherwise = tupla
+
+{-combinar :: String -> [String] -> String -> [(String, String)]
+combinar _ [] _ = []
+combinar mensaje (c:cs) cifradoCorrecto = agregarSiCoincide mensaje c cifradoCorrecto (combinar mensaje cs cifradoCorrecto)
+
+agregarSiCoincide :: String -> String -> String -> [(String, String)] -> [(String, String)]
+agregarSiCoincide mensaje clave cifradoCorrecto tupla
+  | cifrarVigenere mensaje clave == cifradoCorrecto = [(mensaje, clave)] ++ tupla
+  | otherwise = tupla -}

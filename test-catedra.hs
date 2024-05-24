@@ -3,6 +3,7 @@
 import Test.HUnit
 import Solucion
 import Data.List
+import Solucion (todosLosDescifrados)
 
 
 -- No está permitido agregar nuevos imports.
@@ -85,12 +86,13 @@ testsEjcifrarLista = test [
     ]
 
 testsEjfrecuencia = test [
-    expectlistProximity (frecuencia " ") ([0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]),
+   expectlistProximity (frecuencia " ") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "TalleR") [25.0,0.0,0.0,0.0,25.0,0.0,0.0,0.0,0.0,0.0,0.0,50.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "TaLLEz") [50.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,50.0],
-    expectlistProximity (frecuencia "abcdefghijklmnopqrstuvwxyz") [3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846,3.846],
-    expectlistProximity (frecuencia "aBcDeFgHiJkLmNoPqRsTuVwXyZ") [7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0,7.68,0.0],
+    expectlistProximity (frecuencia "abcdefghijklmnopqrstuvwxyz") [3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531,3.8461531],
+    expectlistProximity (frecuencia "aBcDeFgHiJkLmNoPqRsTuVwXyZ") [7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0,7.6923074,0.0],
+    expectlistProximity (frecuencia "aaaab") [80.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "PaaaPaaa") [100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "zzzz9470") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,100.0]
 
@@ -98,17 +100,17 @@ testsEjfrecuencia = test [
 
 testsEjcifradoMasFrecuente = test [
     
-    cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
-    {-cifradoMasFrecuente "a" 3 ~?= ('d', 100.0),
-    cifradoMasFrecuente "zzzz" 1 ~?= ('a', 100.0),
-    cifradoMasFrecuente "aaabbcc" 10 ~?= ('k', 42.85),
-    cifradoMasFrecuente "aabbbzzzz" 10 ~?= ('j', 44.44),
-    cifradoMasFrecuente "ab" 7 ~?= ('h', 50.0),
-    cifradoMasFrecuente "ABCDEaFGHI" 25 ~?= ('z', 100.0),
-    cifradoMasFrecuente "ABCDEFGHIa" 5 ~?= ('f', 100.0),
-    cifradoMasFrecuente "hZOPAIE" 10 ~?= ('r', 100.0),
-    cifradoMasFrecuente "aABCDEFGbb" 25 ~?= ('a', 66.66),
-    cifradoMasFrecuente "aABCDaEFGbb" 25 ~?= ('z', 50.0)     -}       
+       expectAnyTuplaAprox (cifradoMasFrecuente "taller" 3) [('o', 33.333336)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "a" 3) [('d', 100.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "zzzz" 1) [('a', 100.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "aaabbcc" 10) [('k', 42.857140)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "aabbbzzzz" 10) [('j', 44.444442)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "ab" 7) [('h', 50.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "ABCDEaFGHI" 25) [('z', 100.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "ABCDEFGHIa" 5) [('f', 100.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "hZOPAIE" 10) [('r', 100.0)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "aABCDEFGbb" 25) [('a', 66.666663)],
+    expectAnyTuplaAprox (cifradoMasFrecuente "aABCDaEFGbb" 25) [('z', 50.0)]        
     ]
 
 testsEjesDescifrado = test [
@@ -128,8 +130,17 @@ testsEjesDescifrado = test [
     ]
 
 testsEjtodosLosDescifrados = test [
-    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")]
+    "Lista vacia" ~: todosLosDescifrados [] ~?= [],
+    "Un elemento" ~: todosLosDescifrados ["Esquina"] ~?= [],
+    "caso extra" ~: expectPermutacion (todosLosDescifrados ["a","b","A"]) [("a","b"),("b","a"),("A","A")],
+    "Dos elementos cifrados" ~: expectPermutacion (todosLosDescifrados ["compu", "frpsx"]) [("compu","frpsx"),("frpsx","compu")],
+    "Dos elementos no cifrados" ~: todosLosDescifrados ["arbol","pelota"] ~?= [],
+    "Varios elementos pero 1 par" ~: expectPermutacion (todosLosDescifrados ["botella","mouse","suayv","uhmxeet"]) [("botella","uhmxeet"),("uhmxeet","botella")],
+    "Varios elementos con mas pares" ~: expectPermutacion (todosLosDescifrados ["xqdtrqbb","armario","izuizqw","handball","dupdulr"]) [("handball","xqdtrqbb"),("xqdtrqbb","handball"),("armario","izuizqw"),("izuizqw","armario"),("armario","dupdulr"),("dupdulr","armario"),("izuizqw","dupdulr"),("dupdulr","izuizqw")],
+    "Dos elementos cifrados con algunas minusculas" ~: expectPermutacion (todosLosDescifrados ["Ej nuMero 2","Em qxMhur 2","ej numero 2"]) [("Ej nuMero 2","Em qxMhur 2"),("Em qxMhur 2","Ej nuMero 2")]
     ]
+
+
 
 testsEjexpandirClave = test [
     expandirClave "compu" 8 ~?= "compucom"
@@ -148,7 +159,10 @@ testsEjpeorCifrado = test [
     ]
 
 testsEjcombinacionesVigenere = test [
-    combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")]
+    "no produce resultado" ~: combinacionesVigenere ["hola", "mundo"] ["a", "b"] "abcd" ~?= [],
+    "caso del ejercicio" ~: combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")],
+    "Cifra un solo mensaje" ~: combinacionesVigenere ["hola"] ["a"] "hola" ~?= [("hola", "a")],
+    "Cifra múltiples mensajes con claves diferentes" ~: combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmbimnc" ~?= [("hola", "b"),("mundo","a")]
     ]
 
 -- Funciones útiles
