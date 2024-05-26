@@ -62,5 +62,147 @@ def es_nombre_largo(nombre:str) -> bool:
 def es_bisiesto(año:int) -> bool:
     return ((año%4==0) and ((año%100!=0)) or (año%400==0))
 
+# ej 4
+
+def peso_pino(altura:int) -> int:
+    if(altura<=300): # 3 metros = 300 cm
+     return altura*3 
+    else:
+     return 900+ 2*(altura-300) 
+    
+def es_peso_util(peso:int) -> bool:
+    return (400<= peso<=1000)
+
+def sirve_pino1(altura:int) -> bool:
+    return (150<=altura<=350)
+
+def sirve_pino2(altura:int)->bool:
+    return es_peso_util(peso_pino(altura)) # me da el peso del pinto y se fija que este entre 400 y 1000
+
+# ej 5
+
+def devolver_el_doble_si_es_par(numero:int) -> int:
+    if(numero%2==0): # o poner if(es_par(numero))
+        return numero*2
+    else:
+        return numero 
+    
+def devolver_valor_si_es_par_sino_el_que_sigue(numero:int) -> int:
+    if(numero%2==0): # o poner if(es_par(numero))
+        return numero
+    else:
+        return numero + 1 
+
+def devolver_el_doble_si_es_multiplo3_el_triple_si_es_multiplo9(numero:int) -> int:
+    if(numero%9==0): # o podia poner if(es_multiplo_de(numero,3))
+        return numero*3 
+      
+    elif(numero%3==0):
+        return numero*2
+    else: 
+        return numero
+
+def lindo_nombre(nombre:str) -> str:
+    if(len(nombre)>=5):
+        return "Tu nombre tiene muchas letras!" 
+    else: 
+        return "tu nombre tiene menos de 5 caracteres"
+    
+def elRango(numero:int)->None:
+    if(numero<5):
+        print("Menor a 5")
+    elif(10<=numero<=20):
+        print("Entre 10 y 20")
+    else:
+        print("Mayor a 20")
+
+def depende_tu_edad(genero:str,edad:int) -> str:
+    if(genero=="F"):
+     if(18<=edad<60):
+         return "te toca trabajar"
+     else: 
+         return "anda de vacaciones"
+    if(genero=="M"):
+        if(18<=edad<65):
+            return "te toca trabajar"
+        else:
+            return "anda de vacaciones"
+
+# ej 6
+
+def numeros_1_al_10():
+    i=1
+    while (i<=10):
+        print(i)
+        i+=1
+
+def numeros_pares_10_al_40():
+    i=10
+    while(i<=40):
+        print(i)
+        i+=2 
+
+def palabra_eco():
+    i= 1
+    while(i<=10):
+        print("eco")
+        i+=1 
+
+def cohete(numero:int):
+    while (numero>=1):
+        print(numero)
+        numero-=1
+    print ("Despegue")
+
+def viajeEnElTiempo(añoSalida:int,añoLlegada:int):
+    añoSalida-=1 # como viaja un año atras entonces debe ser 2009 y luego hace el resto 
+    while(añoSalida>=añoLlegada):
+        print("Viajó un año al pasado, estamos en el año "+str(añoSalida))
+        añoSalida-=1
+
+def conocerAAristoteles(añoDeSalida:int):
+    while(añoDeSalida>=384):
+        print("Viajó 20 años al pasado, estamos en el "+ str(añoDeSalida))
+        añoDeSalida-=20
+    if(añoDeSalida>=374):
+        print("Viajó 20 años al pasado, estamos en el "+ str(añoDeSalida)) 
+    print("faltan 4 años para conocer a Aristoteles!!")
+
+# ej 7 
+def numeros_del_1_al_10_v2(): 
+ for i in range(1,11,1):
+    print (i)
+
+def pares_del_10_al_40_v2(): 
+ for i in range(10,41,2):
+    print (i)
+
+def eco_v2(): 
+ for i in range(1,11,1):
+    print ("eco")
+
+def cohete_v2(numero:int): 
+ for i in range(numero,0,-1):
+    print (i)
+ print("Despegue") 
+  
+def viajeEnElTiempoV2(añoSalida:int,añoLlegada:int):
+ añoSalida-=1 
+ for i in range(añoSalida,añoLlegada-1,-1):
+     print("Viajó un año al pasado, estamos en el año "+str(i))
+ añoSalida-=1
+
+def conocerAAristotelesV2(añoSalida:int):
+ for i in range(añoSalida,384,-20):
+     print("Viajó 20 años al pasado, estamos en el año "+str(i))
+ añoSalida-=20
+
+ for i in range(añoSalida,374,-20):
+     print("Viajó 20 años al pasado, estamos en el año "+str(i))
+ añoSalida-=20
+
+ print("falta 4 años para conocer a Aristoteles!!")
+
+
 
 
