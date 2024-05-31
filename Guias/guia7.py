@@ -123,4 +123,135 @@ def vocalesDistintas(palabra:str)-> bool:
     if(pertenece('u',palabra) or pertenece('U',palabra)):
         contadorVocalesDistintas+=1
     return contadorVocalesDistintas>=3
+
+# parte 2 
+ 
+def borrarPosicionesPares (s:[int]) -> [int]:
+    for i in range (0,len(s)):
+        if(i%2==0):
+            s[i]=0 # asigna 0 a el numero que hay en la posicion i de s 
+    return s
+
+def borrarPosicionesPares2(s:[int]) -> [int]:
+    nuevaLista=[]
+    for i in range (0,len(s)):
+        if(i%2==0):
+           nuevaLista.append(0)
+        else: 
+            nuevaLista.append(s[i]) 
+    return nuevaLista
+
+def borrarVocales(palabra:str)->str:
+    nuevaPalabra:str=""
+    for i in range(0,len(palabra)):
+        if (not(es_vocal(palabra[i]))):
+            nuevaPalabra+=palabra[i]
+    return nuevaPalabra
+
+def es_vocal(letra:str)->bool:
+    return (letra=="a") or (letra=="e") or (letra=="i") or (letra=="o") or (letra=="u") or (letra=="A") or (letra=="E") or (letra=="I") or (letra=="O") or (letra=="U")
+
+def reemplazaVocales(palabra:[chr])->[chr]:
+    nuevaPalabra=[]
+    for i in range(0,len(palabra)):
+        if (es_vocal(palabra[i])):
+            nuevaPalabra+=" "
+        else:
+            nuevaPalabra+=palabra[i]
+    return nuevaPalabra
+
+
+def da_vuelta_str(palabra:[chr])-> [chr]:
+    palabraDadaVuelta=[]
+    for i in range(0,len(palabra)):
+        palabraDadaVuelta+=palabra[(len(palabra)-i)-1]
+    return palabraDadaVuelta 
+
+def eliminar_repetidos(palabra:[chr])->[chr]:
+    palabraSinRepetidos=[]
+    for i in range(0,len(palabra)):
+        if (palabra[i] not in palabraSinRepetidos):
+            palabraSinRepetidos.append(palabra[i])
+    return palabraSinRepetidos
+
+def aprobado(notas:[int])->int:
+    if todasLasNotasSonMayoresIguales4(notas) and promedioDeNotas(notas)>=7:
+        return 1 
+    if todasLasNotasSonMayoresIguales4(notas) and 4<=promedioDeNotas(notas)<7:
+        return 2
+    if not(todasLasNotasSonMayoresIguales4(notas)) and (promedioDeNotas(notas)<4):
+        return 3 
+
+def todasLasNotasSonMayoresIguales4(notas:[int])->bool:
+    for nota in notas:
+        if (nota<4):
+            return False
+    return True
     
+def promedioDeNotas(notas:[int])->float:
+    sumaDeNotas=0
+    for nota in notas:
+        sumaDeNotas+=nota
+    promedio=sumaDeNotas//len(notas)
+    return promedio 
+
+# ej 4
+def listaDeNombres()-> [str]:
+    res=[]
+    nombre=""
+    while(nombre!="listo"):
+        print("ingrese un nombre:")
+        nombre=input()
+        if (nombre!='listo'):
+            res.append(nombre)
+    return res 
+
+
+def historialSube()-> [(str,int)]:
+    res=[]
+    caracter:str=""
+    monto:int=0
+    dineroActual:int=0
+    while(caracter!='X'):
+        print("Ingrese una opción(C: Cargar, D: Descontar, X=Cerrar):")
+        caracter=input()
+        if(caracter=='C'):
+            print("Ingrese un monto:")
+            monto=int(input())
+            dineroActual+=monto
+            res.append((caracter,monto))
+        elif(caracter=='D'):
+            print("Ingrese un monto:")
+            monto=int(input())
+            dineroActual-=monto
+            res.append((caracter,monto))
+    print("Terminó con "+str(dineroActual)+" pesos")        
+    return res
+
+#def
+
+
+
+# EJ 5 
+def perteneceACadaUno (e:int,s:[[int]],res:[bool])->None:
+    res=[]
+    for i in range (0,len(s)):
+        if (not pertenece(e,s[i])):
+            res.append(False)
+        else: 
+            res.append(True)
+    print(res)
+
+
+
+
+def filasOrdenadas(s:[[int]],res:[bool])->None:
+    res=[]
+    for i in range (0,len(s)):
+        if (not ordenados(s[i])):
+            res.append(False)
+        else:
+            res.append(True)
+    print(res)
+
+
