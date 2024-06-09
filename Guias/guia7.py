@@ -25,14 +25,24 @@ def pertenece3(e:int,s:[int])->bool:
     return False
 
 
-def divide_a_todos(e:int,s:[int])->bool:
+"""def divide_a_todos(e:int,s:[int])->bool:
    i=0
    while (0<=i<len(s)):
       if (s[i]%e==0):
          return True
       i+=1
    else:
-     return False
+     return False"""
+
+def divide_a_todos(e:int,s:[int])->bool:
+    for i in range(0,len(s)):
+        if (s[i]%e==0):
+            return True
+    
+    return False 
+
+
+
 
 def sumaTotal(s:[int])->int:
     contador=0
@@ -59,9 +69,9 @@ def ordenados2(seq:[int])->bool:
 
 def listaPalabras(s:[str]) -> bool:
    for i in range(0,len(s)): 
-      if (len(s[i])>=7):
+      if (len(s[i])>7):
          return True
-      i+=1
+      
    return False 
 
 def esPalindromo(palabra:str)->bool:
@@ -102,13 +112,20 @@ def hay_minuscula(palabra:str)->bool:
 
 def saldoActual(operaciones:[(str,float)])->float:
     saldo=0
-    for i in range(0,len(operaciones)):
+    for operacion in operaciones:
+        if operacion[0]=="I":
+            saldo+=operacion[1]
+        if operacion[0]=="R":
+            saldo-=operacion[1]
+    return saldo 
+"""O PONER:
+ for i in range(0,len(operaciones)):
         if (operaciones[i][0]=="I"):
             saldo+=operaciones[i][1]
-        if(operaciones[i][0]=="R"):
+        elif(operaciones[i][0]=="R"):
             saldo-=operaciones[i][1]
     return saldo 
-
+"""
 # 1.9)
 def vocalesDistintas(palabra:str)-> bool:
     contadorVocalesDistintas=0
@@ -124,13 +141,32 @@ def vocalesDistintas(palabra:str)-> bool:
         contadorVocalesDistintas+=1
     return contadorVocalesDistintas>=3
 
+"""def vocalesDistintas(palabra:str)-> bool:
+    return tieneVocales(palabra)>=3
+
+def tieneVocales(texto:str)-> int:
+    sumaVocales=0
+    for caracter in texto:
+        if caracter=='a' or caracter=='A':
+            sumaVocales+=1
+        if caracter=='e' or caracter=='E':
+            sumaVocales+=1
+        if caracter=='i' or caracter=='I':
+            sumaVocales+=1
+        if caracter=='o' or caracter=='O':
+            sumaVocales+=1
+        if caracter=='u' or caracter=='U':
+            sumaVocales+=1
+    return sumaVocales"""
+        
+
 # parte 2 
  
-def borrarPosicionesPares (s:[int]) -> [int]:
+def borrarPosicionesPares (s:[int]):
     for i in range (0,len(s)):
         if(i%2==0):
             s[i]=0 # asigna 0 a el numero que hay en la posicion i de s 
-    return s
+    return s 
 
 def borrarPosicionesPares2(s:[int]) -> [int]:
     nuevaLista=[]
@@ -143,9 +179,9 @@ def borrarPosicionesPares2(s:[int]) -> [int]:
 
 def borrarVocales(palabra:str)->str:
     nuevaPalabra:str=""
-    for i in range(0,len(palabra)):
-        if (not(es_vocal(palabra[i]))):
-            nuevaPalabra+=palabra[i]
+    for caracter in palabra:
+        if not es_vocal(caracter):
+            nuevaPalabra+=caracter
     return nuevaPalabra
 
 def es_vocal(letra:str)->bool:
@@ -171,9 +207,10 @@ def eliminar_repetidos(palabra:[chr])->[chr]:
     palabraSinRepetidos=[]
     for i in range(0,len(palabra)):
         if (palabra[i] not in palabraSinRepetidos):
-            palabraSinRepetidos.append(palabra[i])
+            palabraSinRepetidos+=(palabra[i])
     return palabraSinRepetidos
 
+# 3
 def aprobado(notas:[int])->int:
     if todasLasNotasSonMayoresIguales4(notas) and promedioDeNotas(notas)>=7:
         return 1 
@@ -202,7 +239,7 @@ def listaDeNombres()-> [str]:
     while(nombre!="listo"):
         print("ingrese un nombre:")
         nombre=input()
-        if (nombre!='listo'):
+        if (nombre!="listo"):
             res.append(nombre)
     return res 
 
@@ -236,22 +273,28 @@ def historialSube()-> [(str,int)]:
 def perteneceACadaUno (e:int,s:[[int]],res:[bool])->None:
     res=[]
     for i in range (0,len(s)):
-        if (not pertenece(e,s[i])):
+        if (e not in s[i]):
             res.append(False)
         else: 
             res.append(True)
-    print(res)
+    return res 
 
 
+def es_matriz(s:[[int]])->bool:
+    for i in range(0,len(s)):
+        if (len(s)!=len(s[i])):
+            return False
+    return True
 
-
-def filasOrdenadas(s:[[int]],res:[bool])->None:
+#mal
+def filasOrdenadas(m:[[int]],res:[bool])->None:
     res=[]
-    for i in range (0,len(s)):
-        if (not ordenados(s[i])):
+    for i in range (0,len(m)):
+        if (m[i]+1<m[i]):
             res.append(False)
         else:
             res.append(True)
     print(res)
+
 
 

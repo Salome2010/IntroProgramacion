@@ -27,7 +27,7 @@ def imprime_saludo(nombre: str):
     print("hola" + nombre) 
 
 def raiz_cuadrada_de(numero) -> float:
-    return math.sqr(numero) #raiz cuadrada 
+    return math.sqrt(numero) #raiz cuadrada 
 
 def fahrenheit_a_celsius(temp_far:float) -> float:
     return((temp_far -32)*5)/9 
@@ -102,7 +102,7 @@ def devolver_el_doble_si_es_multiplo3_el_triple_si_es_multiplo9(numero:int) -> i
     else: 
         return numero
 
-def lindo_nombre(nombre:str) -> str:
+def lindo_nombre(nombre:str):
     if(len(nombre)>=5):
         return "Tu nombre tiene muchas letras!" 
     else: 
@@ -113,21 +113,20 @@ def elRango(numero:int)->None:
         print("Menor a 5")
     elif(10<=numero<=20):
         print("Entre 10 y 20")
-    else:
+    elif(numero>20):
         print("Mayor a 20")
 
 def depende_tu_edad(genero:str,edad:int) -> str:
     if(genero=="F"):
      if(18<=edad<60):
          return "te toca trabajar"
-     else: 
-         return "anda de vacaciones"
+     
     if(genero=="M"):
         if(18<=edad<65):
             return "te toca trabajar"
-        else:
-            return "anda de vacaciones"
-
+        
+    return "anda de vacaciones"
+   
 # ej 6
 
 def numeros_1_al_10():
@@ -156,17 +155,17 @@ def cohete(numero:int):
 
 def viajeEnElTiempo(añoSalida:int,añoLlegada:int):
     añoSalida-=1 # como viaja un año atras entonces debe ser 2009 y luego hace el resto 
-    while(añoSalida>=añoLlegada):
-        print("Viajó un año al pasado, estamos en el año "+str(añoSalida))
+    while(añoSalida>añoLlegada):
+        print("Viajó un año al pasado, estamos en el año "+ str(añoSalida))
         añoSalida-=1
 
 def conocerAAristoteles(añoDeSalida:int):
-    while(añoDeSalida>=384):
+    while(añoDeSalida>=374):
         print("Viajó 20 años al pasado, estamos en el "+ str(añoDeSalida))
         añoDeSalida-=20
-    if(añoDeSalida>=374):
-        print("Viajó 20 años al pasado, estamos en el "+ str(añoDeSalida)) 
-    print("faltan 4 años para conocer a Aristoteles!!")
+    """if(añoDeSalida>=374):
+        print("Viajó 20 años al pasado, estamos en el "+ str(añoDeSalida))"""
+    
 
 # ej 7 
 def numeros_del_1_al_10_v2(): 
@@ -190,18 +189,12 @@ def viajeEnElTiempoV2(añoSalida:int,añoLlegada:int):
  añoSalida-=1 
  for i in range(añoSalida,añoLlegada-1,-1):
      print("Viajó un año al pasado, estamos en el año "+str(i))
- añoSalida-=1
+ 
 
 def conocerAAristotelesV2(añoSalida:int):
  for i in range(añoSalida,384,-20):
      print("Viajó 20 años al pasado, estamos en el año "+str(i))
- añoSalida-=20
-
- for i in range(añoSalida,374,-20):
-     print("Viajó 20 años al pasado, estamos en el año "+str(i))
- añoSalida-=20
-
- print("falta 4 años para conocer a Aristoteles!!")
+ 
 
 
 
