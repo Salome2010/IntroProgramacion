@@ -1,7 +1,4 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use even" #-}
-{-# HLINT ignore "Redundant bracket" #-}
-import Distribution.Simple.Setup (falseArg)
+
 -- GUIA 3
 
 -- Ejercico 1
@@ -32,8 +29,8 @@ absoluto x | x >=0 = x
 
 --b) 
 maximoabsoluto :: Integer -> Integer -> Integer
-maximoabsoluto x y | x > y = absoluto (x)
-                   | x < y = absoluto (y)
+maximoabsoluto n s | absoluto n >= absoluto s = absoluto n
+                   | otherwise = absoluto s 
 
 --c)
 maximo3 :: Integer -> Integer -> Integer -> Integer
@@ -43,13 +40,16 @@ maximo3 x y z |  x>=y && x>=z = x
 
 --d) 
 algunoEs0 :: Float -> Float -> Bool
-algunoEs0 x y | x == 0 || y==0 = True
-              | otherwise = False
+algunoEs0 x y = x == 0 || y==0 
+
+ambosSon0 :: Float -> Float -> Bool
+ambosSon0 n s = n==0 && s==0 
+              
 
 --f)
 mismoIntervalo :: Float -> Float -> Bool
-mismoIntervalo x y | perteneceIntervalo (x) == perteneceIntervalo (y) = True
-                   | otherwise = False
+mismoIntervalo n s = perteneceIntervalo n   == perteneceIntervalo  s 
+                   
 
 perteneceIntervalo :: Float -> Integer
 perteneceIntervalo x | x<=3 = 1
@@ -67,8 +67,8 @@ sumaDistintos x y z | x==y && y==z = 0
 
 --h)
 esMultiploDe :: Integer -> Integer -> Bool
-esMultiploDe x y | x `mod` y == 0 = True
-                 | otherwise = False 
+esMultiploDe x y =  x `mod` y == 0 
+                 
 --i)
 digitoUnidades :: Integer -> Integer
 digitoUnidades x = mod x 10
@@ -79,8 +79,8 @@ digitoDecenas x = digitoUnidades (div x 10)
 
 --Ejercicio 3
 estanRelacionados :: Integer -> Integer -> Bool
-estanRelacionados a b | mod a b == 0 = True
-                      | otherwise = False
+estanRelacionados a b =  mod a b == 0 
+                      
 
 --Ejercicio 4
 --a) lo mismo que producto escalar entre dos vectores 
@@ -89,8 +89,8 @@ prodInt (x,y) (z,w) =  x*z + y*w
 
 --b)
 todoMenor :: (Float,Float) -> (Float,Float) -> Bool
-todoMenor (x,y) (z,w) | x<z && y<w = True
-                      | otherwise = False
+todoMenor (x,y) (z,w) = x<z && y<w 
+                      
 
 --c) calcula la distancia entre dos puntos de R2. Se deduce de pitágoras => vectorDistancia ((x1-x2),(y1-y2)) y distancia = |vectorDistancia|
 distanciaPuntos :: (Float,Float) -> (Float,Float) -> Float
@@ -128,27 +128,26 @@ invertir :: (a, b) -> (b, a)
 invertir (a,b) = (b,a)
 
 --Ejercicio 5
-todosMenores :: (Integer, Integer, Integer) -> Bool 
+{-todosMenores :: (Integer, Integer, Integer) -> Bool 
 todosMenores x y z = (f x > g x) && (f y > g y) && (f z > g z) 
 
-f :: Integer -> Integer 
-f x | x<= 7 = x^2
-    | otherwise = 2x-1
+f :: Integer -> Integer
+f n | n<= 7 = n**2
+    | otherwise = 2*x - 1
 
 g :: Integer -> Integer 
-g x | esPar x = x/2
-    | otherwise = 3x + 1
+g n | esPar n = n/2
+    | otherwise = 3*x + 1
     where esPar x = mod x 2 == 0
-
+-}
 --Ejercicio 6
 bisiesto :: Integer ->Bool
-bisiesto x | mod x 4 /= 0 || (mod x 100 == 0 && mod x 400 /=0) = False
-           | otherwise = True 
+bisiesto n = mod n 4 == 0 || (mod n 100 /= 0 && mod n 400 ==0) 
+           
 
 --Ejercicio 7
 distanciaManhattan:: (Float, Float, Float) ->(Float, Float, Float) ->Float
-distanciaManhattan (x,y,z) (a,b,c) | (x-a) + (y-b) + (z-c) >= 0 = (x-a) + (y-b) + (z-c)
-                                   | otherwise = -((x-a) + (y-b) + (z-c))
+distanciaManhattan (x,y,z) (a,b,c) = -((x-a) + (y-b) + (z-c))
 
 -- tamnien podia hacerlo de la sig manera: 
 --distanciaManhattan::(Float, Float, Float) -> (Float, Float, Float) -> Float
@@ -158,10 +157,11 @@ distanciaManhattan (x,y,z) (a,b,c) | (x-a) + (y-b) + (z-c) >= 0 = (x-a) + (y-b) 
 --calculo :: (Float, Float, Float) -> (Float, Float, Float) -> Float
 --calculo (x,y,z) (a,b,c) = (x-a) + (y-b) + (z-c)
 
+
 --Ejercico 8
 comparar :: Integer ->Integer ->Integer
-comparar x y | sumaUltimosDosDigitos (x) > sumaUltimosDosDigitos (y) = -1
-             | sumaUltimosDosDigitos (x) < sumaUltimosDosDigitos (y) = 1
+comparar x y | sumaUltimosDosDigitos x > sumaUltimosDosDigitos y = -1
+             | sumaUltimosDosDigitos x < sumaUltimosDosDigitos y = 1
              | otherwise =0
 
 sumaUltimosDosDigitos :: Integer -> Integer 
