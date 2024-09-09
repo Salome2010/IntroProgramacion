@@ -1,11 +1,12 @@
 -- EJERCICIO 1
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+import Data.Fixed (div')
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Redundant bracket" #-}
 fibonacci:: Integer ->Integer 
-fibonacci n | n==0 = 0
-            | n==1 = 1
-            | otherwise = fibonacci(n-1) + fibonacci(n-2)
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci(n-1) + fibonacci(n-2)
 
 --Ejercicio 2
 parteEntera :: Float -> Integer 
@@ -28,22 +29,35 @@ sumaImpares :: Int -> Int
 sumaImpares 1 = 1
 sumaImpares x = sumaImpares (x-1) + (2*x-1) 
 
+-- o tambien sin recu
+--sumaImpares :: Int -> Int
+--sumaImpares 1 = 1
+--sumaImpares x = x*x
+
 --Ejercicio 5
 medioFact :: Integer ->Integer 
-medioFact n | n==0 = 1
-            | otherwise = n * medioFact(n-2) 
+medioFact 0 = 1
+medioFact n = n * medioFact(n-2) 
 
 --Ejercicio 6
 sumaDigitos :: Integer ->Integer 
 sumaDigitos n | n < 10 = n
-              | otherwise = (mod n 10) + sumaDigitos (div n 10) 
+              | otherwise = ultimoDigito n  + sumaDigitos (div n 10) 
 
 
 --Ejercicio 7
-todosDigitosIguales :: Integer ->Bool 
+{-todosDigitosIguales :: Integer ->Bool 
 todosDigitosIguales n | n< 10 = True 
                       | n<100 = mod n 10 == div n 10
-                      | otherwise = todosDigitosIguales (mod n 100) && todosDigitosIguales (div n 10)
+                      | otherwise = todosDigitosIguales (mod n 100) && todosDigitosIguales (div n 10)-}
+
+todosDigitosIguales2 ::  Integer -> Bool
+todosDigitosIguales2 n | n<10 = True
+                       | otherwise = ultimoDigito n == ultimoDigito(div n 10 ) && todosDigitosIguales2(div n 10)
+
+ultimoDigito :: Integer -> Integer
+ultimoDigito n = mod n 10 
+
 
 --Ejercicio 8
 cantDigitos :: Int -> Int
@@ -51,11 +65,13 @@ cantDigitos n   | n<10 = 1
                 | otherwise = 1 + cantDigitos (div n 10)
 
 iesimoDigito :: Int -> Int -> Int
-iesimoDigito n i    | cantDigitos n == i = sacarUltimoDigito
+iesimoDigito n i    | i == cantDigitos n = mod n 10 
                     | otherwise = iesimoDigito (div n 10) i 
-                    where sacarUltimoDigito = mod n 10
+                    
 
 --Ejercicio 9
+
+
 esCapicua::Integer->Bool
 esCapicua n = n== inverso n
 
@@ -69,9 +85,9 @@ f1 0 = 1
 f1 n = 2^n + f1 (n-1)
 
 --b) 
-f2:: Integer -> Float -> Float
-f2 1 q= q 
-f2 n q= q^n + f2 (n-1) q
+f2:: Integer -> Integer -> Integer
+f2 _ 0= 1 
+f2 q n = q^n + f2 q (n-1) 
 
 --c) 
 f3 :: Integer -> Float -> Float 
@@ -92,12 +108,12 @@ f4aux n q i | i == n = q^n
 --Ejercicio 11
 --a) 
 esAprox :: Integer -> Float
-esAprox n | n==0 = 1
-          | otherwise = (1 / factorial n) + esAprox(n-1)
+esAprox 0 = 1
+esAprox n = (1 / factorial n) + esAprox(n-1)
 
 factorial :: Integer -> Float
-factorial n | n==0 = 1
-            | otherwise = fromIntegral n * (factorial (n-1))
+factorial 0 = 1
+factorial n = fromIntegral n * (factorial (n-1))
 
 -- agrego fromIntegral para que no me aparezca error en el n solo o 2*n 
 
@@ -113,14 +129,15 @@ aprox :: Integer -> Float
 aprox n | n==1 = 2
         | otherwise = 2 + ( 1 / aprox (n-1) ) 
 
+
 --Ejercicio 13
 sumatoriaDoble :: Integer->Integer->Integer
-sumatoriaDoble 1 m = sumatoriaAux 1 m
-sumatoriaDoble n m = sumatoriaAux n m + sumatoriaDoble (n-1) m 
+sumatoriaDoble 0 _ = 0
+sumatoriaDoble n m = sumatoriaSimple n m + sumatoriaDoble (n-1) m 
 
-sumatoriaAux::Integer->Integer->Integer
-sumatoriaAux n 1 = n
-sumatoriaAux n m  = n^m + sumatoriaAux n (m-1)
+sumatoriaSimple::Integer->Integer->Integer
+sumatoriaSimple n 1 = n
+sumatoriaSimple n m  = n^m + sumatoriaSimple n (m-1)
 
 
 --Ejercicio 14
@@ -141,6 +158,8 @@ sumaRacionales n m = sumaRacionalesAux n m + sumaRacionales (n-1) m
 sumaRacionalesAux::Integer->Integer->Float
 sumaRacionalesAux n 1=  fromInteger n
 sumaRacionalesAux n m = fromIntegral n / fromIntegral m + sumaRacionalesAux n (m-1)
+
+
 
 
 
