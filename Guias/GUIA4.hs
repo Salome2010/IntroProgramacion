@@ -71,12 +71,22 @@ iesimoDigito n i    | i == cantDigitos n = mod n 10
 
 --Ejercicio 9
 
+iEsimoDigito :: Int -> Int -> Int
+iEsimoDigito n 1 = div n (10^((cantidadDigitos n)-1))
+iEsimoDigito n i = iEsimoDigito sacarPrimerDigito (i-1)
+    where primerDigito = div n (10^((cantidadDigitos n)-1))
+          sacarPrimerDigito = mod n (10^((cantidadDigitos n)-1))
 
-esCapicua::Integer->Bool
-esCapicua n = n== inverso n
+cantidadDigitos :: Int -> Int
+cantidadDigitos n | n < 10 = 1
+                  | otherwise = cantidadDigitos (div n 10) + 1
 
-inverso::Integer->Integer
-inverso = read . reverse . show
+esCapicua :: Int -> Bool
+esCapicua x | x < 10 = True
+            | x < 100 = iEsimoDigito x 1 ==  iEsimoDigito x 2
+            | otherwise = iEsimoDigito x 1 == ultimoDigito && esCapicua sacarPrimeroYultimo
+    where ultimoDigito = mod x 10
+          sacarPrimeroYultimo = div (mod x (10^((cantidadDigitos x)-1))) 10
 
 --Ejercicio 10
 --a)
@@ -153,14 +163,41 @@ sumaPotenciasaux q a b = q^(b+a) + sumaPotenciasaux q a (b-1)
 --Ejercicio 15
 sumaRacionales::Integer->Integer->Float
 sumaRacionales 1 m= sumaRacionalesAux 1 m
-sumaRacionales n m = sumaRacionalesAux n m + sumaRacionales (n-1) m 
+sumaRacionales p m = sumaRacionalesAux p m + sumaRacionales (p-1) m 
 
 sumaRacionalesAux::Integer->Integer->Float
-sumaRacionalesAux n 1=  fromInteger n
-sumaRacionalesAux n m = fromIntegral n / fromIntegral m + sumaRacionalesAux n (m-1)
+sumaRacionalesAux p 1=  fromInteger p
+sumaRacionalesAux p m = fromIntegral p / fromIntegral m + sumaRacionalesAux p (m-1)
 
+---Ejercicio 16
 
+menorDivisor :: Integer -> Integer
+menorDivisor n = menorDivisorAux n 2
 
+menorDivisorAux :: Integer -> Integer -> Integer
+menorDivisorAux n i | mod n i == 0 = i
+                    | otherwise = menorDivisorAux n (i+1) 
+
+esPrimo :: Integer -> Bool
+esPrimo n =  n == menorDivisor n 
+
+{-sonPrimos :: Integer -> Integer -> Bool
+sonPrimos n m = not(fromIntegral (menorDivisor n / menorDivisor m ) ) -- ver -}
+
+{-sonCoprimos :: Integer -> Integer -> Bool
+sonCoprimos n m = mod n m == 1 && mod m n == 1-}
+
+nEsimoPrimo::Integer->Integer
+nEsimoPrimo 1 = 2
+nEsimoPrimo n = siguientePrimo (nEsimoPrimo (n-1))
+-- Devuelve el primo nº n, 
+-- Ej: nEsimoPrimo 4 = 7, nEsimoPrimo5=11 , nEsimoPrimo 19=67
+
+siguientePrimo::Integer->Integer
+siguientePrimo n | esPrimo (n+1) = n+1
+                 | otherwise = siguientePrimo (n+1)
+-- Si el siguiente numero es primo, devuelve ese numero, si no, vuelve a chequear hasta tener uno primo
+-- Ej: siguientePrimo 3 = 5, siguientePrimo 5=7, siguientePrimo 6=7
 
 
 
