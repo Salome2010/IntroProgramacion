@@ -8,6 +8,8 @@ fibonacci 0 = 0
 fibonacci 1 = 1
 fibonacci n = fibonacci(n-1) + fibonacci(n-2)
 
+
+
 --Ejercicio 2
 parteEntera :: Float -> Integer 
 parteEntera n | n < 1 && n > 0 = 0
@@ -200,4 +202,21 @@ siguientePrimo n | esPrimo (n+1) = n+1
 -- Ej: siguientePrimo 3 = 5, siguientePrimo 5=7, siguientePrimo 6=7
 
 
+--Ejercicio 17 
+esFibonacciAux::Integer->Integer->Integer->Bool
+esFibonacciAux n fibAnterior fib
+    | fib == n = True
+    | fib > n = False
+    | otherwise = esFibonacciAux n fib (fib+fibAnterior) -- Esto pues en la siguiente iteracion fibAnterior es fib, y fib es (fib+fibAnterior) por def de Fibonacci
+
+esFibonacci :: Integer->Bool
+esFibonacci n = esFibonacciAux n 0 1 --Con 0 y 1 arranco la secuencia de Fibonacci. Prendo la chispa de la recursion
+
+--eJERCICIO 18
+mayorDigitoPar::Integer->Integer
+mayorDigitoPar n | n<10 && even n = n
+                 | n<10 && odd n = -1
+                 | even (mod n 10 )= max (mod n 10) (mayorDigitoPar (div n 10))
+                 | otherwise = mayorDigitoPar (div n 10) 
+                 
 
