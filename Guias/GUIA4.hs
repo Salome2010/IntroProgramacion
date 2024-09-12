@@ -183,11 +183,6 @@ menorDivisorAux n i | mod n i == 0 = i
 esPrimo :: Integer -> Bool
 esPrimo n =  n == menorDivisor n 
 
-{-sonPrimos :: Integer -> Integer -> Bool
-sonPrimos n m = not(fromIntegral (menorDivisor n / menorDivisor m ) ) -- ver -}
-
-{-sonCoprimos :: Integer -> Integer -> Bool
-sonCoprimos n m = mod n m == 1 && mod m n == 1-}
 
 nEsimoPrimo::Integer->Integer
 nEsimoPrimo 1 = 2
@@ -200,6 +195,7 @@ siguientePrimo n | esPrimo (n+1) = n+1
                  | otherwise = siguientePrimo (n+1)
 -- Si el siguiente numero es primo, devuelve ese numero, si no, vuelve a chequear hasta tener uno primo
 -- Ej: siguientePrimo 3 = 5, siguientePrimo 5=7, siguientePrimo 6=7
+
 
 
 --Ejercicio 17 
@@ -219,4 +215,37 @@ mayorDigitoPar n | n<10 && even n = n
                  | even (mod n 10 )= max (mod n 10) (mayorDigitoPar (div n 10))
                  | otherwise = mayorDigitoPar (div n 10) 
                  
+--Ejercicio 19
+sumaPrimosHasta::Integer->Integer
+sumaPrimosHasta 1 = 2
+sumaPrimosHasta n = nEsimoPrimo n + sumaPrimosHasta (n-1)
+
+
+esSumaInicialDePrimosDesde :: Integer-> Integer->Bool
+esSumaInicialDePrimosDesde m 1 = False
+esSumaInicialDePrimosDesde m n | sumaPrimosHasta m == n = True
+                               | sumaPrimosHasta m > n = False
+                               | sumaPrimosHasta m < n = esSumaInicialDePrimosDesde (m+1) n
+
+
+esSumaInicialDePrimos :: Integer -> Bool
+esSumaInicialDePrimos n = esSumaInicialDePrimosDesde 1 n
+
+--Ejercicio 21
+--Funcion para chequear si determinados p,q,r cumplen la condicion de p²+q²=r²
+cumplePitagoras :: Integer->Integer->Integer->Bool
+cumplePitagoras p q r = p^2 + q^2 <= r^2
+
+pitagorasNFijo :: Integer -> Integer -> Integer -> Integer
+pitagorasNFijo n m r | m<0 = 0
+                     | cumplePitagoras n m r = 1 + pitagorasNFijo n (m-1) r
+                     | otherwise = 0 + pitagorasNFijo n (m-1) r
+--Voy sumando uno solo si se cumple la condicion pedida, al llegar a 0 termino
+
+pitagoras :: Integer -> Integer -> Integer -> Integer
+pitagoras n m r | n==0 = pitagorasNFijo 0 m r
+                | otherwise = pitagorasNFijo n m r + pitagoras (n-1) m r
+-- Voy haciendo pitagoras con n fijo de cada n hasta llegar a n=0
+
+
 
