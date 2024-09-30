@@ -232,6 +232,7 @@ esSumaInicialDePrimos :: Integer -> Bool
 esSumaInicialDePrimos n = esSumaInicialDePrimosDesde 1 n
 
 --Ejercicio 21
+
 --Funcion para chequear si determinados p,q,r cumplen la condicion de p²+q²=r²
 cumplePitagoras :: Integer->Integer->Integer->Bool
 cumplePitagoras p q r = p^2 + q^2 <= r^2

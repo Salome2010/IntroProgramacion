@@ -24,11 +24,11 @@ principio (x:xs) = x : principio xs
 reverso :: [t] -> [t] 
 reverso [] = []
 reverso (x:xs) = reverso xs ++ [x]
-{-ej: reverso (3,4,5), reverse [4,5] ++ [2]
-                        reverse [4] ++ [5] ++ [2]
-                        reverse [] ++ [4] ++ [5] ++ [2]
-                        []++ [4]++[5]++[2
-                        [4,5,2]
+{-ej: reverso (3,4,5), reverse [4,5] ++ [3]
+                        reverse [4] ++ [5] ++ [3]
+                        reverse [] ++ [4] ++ [5] ++ [3]
+                        []++ [4]++[5]++[3]
+                        [4,5,3]
  -} 
 
  --Ejercicio 2 
