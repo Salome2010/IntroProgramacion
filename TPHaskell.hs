@@ -1,4 +1,11 @@
 module TPHaskell where
+
+type Ciudad = String
+type Duracion = Float
+type Vuelo = (Ciudad, Ciudad, Duracion)
+type AgenciaDeViajes = [Vuelo]
+
+
 --1)
 vueloValido :: [(String, String,Float)] -> Bool
 vueloValido [(v1,v2,t)] = v1/=v2 && t>0
@@ -26,3 +33,35 @@ ciudadesConectadasAux :: [(String,String,Float)] -> String -> [(String,String,Fl
 ciudadesConectadasAux [] _ = []
 ciudadesConectadasAux ((x1,x2,t1):xs) n | (n/=x1 && n/=x2) = (x1,x2,t1) : ciudadesConectadasAux xs n
                                         | otherwise = ciudadesConectadasAux xs n 
+
+
+--4)
+ciudadMasConectada :: AgenciaDeViajes -> Ciudad
+ciudadMasConectada agencia = mayorCantidadApariciones(aplanar agencia) 
+
+-- Defino aplanar para juntar todas las ciudades en una sola lista, sin considerar la duracion del vuelo
+aplanar :: AgenciaDeViajes -> [Ciudad]
+aplanar [] = []
+aplanar ((x1,x2,_):xs) = x1 : x2:  aplanar xs
+
+-- Devuelvo la ciudad que mayores apariciones tiene en la lista de ciudades resultante de aplanar 
+mayorCantidadApariciones :: [Ciudad] -> Ciudad
+mayorCantidadApariciones [x] = x
+mayorCantidadApariciones (x:y:xs) | cantidadApariciones x xs >= cantidadApariciones y xs = mayorCantidadApariciones(x:xs)
+                                  | otherwise = mayorCantidadApariciones (y:xs) 
+
+-- cantidadApariciones cuenta la cantidad de veces que aparece una ciudad en la lista de ciudades resiltante de aplanar 
+cantidadApariciones :: Ciudad -> [Ciudad] -> Integer
+cantidadApariciones _ []  = 0
+cantidadApariciones n (x:xs)  | n==x = 1 + cantidadApariciones n xs
+                              | otherwise = cantidadApariciones n xs  
+
+{-eliminarRepeticiones :: [String] -> [String]
+eliminarRepeticiones [] = []
+eliminarRepeticiones (x:xs) = x : eliminarRepeticionesAux x xs
+
+eliminarRepeticionesAux :: String -> [String] -> [String]
+eliminarRepeticionesAux _ []  = []
+eliminarRepeticionesAux x (y:xs) | x==y = eliminarRepeticionesAux x xs
+                                 | otherwise = y: eliminarRepeticionesAux x xs-}
+
