@@ -36,7 +36,7 @@ ciudadesConectadasAux ((x1,x2,t1):xs) n | (n/=x1 && n/=x2) = (x1,x2,t1) : ciudad
 
 
 --4)
-ciudadMasConectada :: AgenciaDeViajes -> Ciudad
+{-ciudadMasConectada :: AgenciaDeViajes -> Ciudad
 ciudadMasConectada agencia = mayorCantidadApariciones(aplanar agencia) 
 
 -- Defino aplanar para juntar todas las ciudades en una sola lista, sin considerar la duracion del vuelo
@@ -63,5 +63,35 @@ eliminarRepeticiones (x:xs) = x : eliminarRepeticionesAux x xs
 eliminarRepeticionesAux :: String -> [String] -> [String]
 eliminarRepeticionesAux _ []  = []
 eliminarRepeticionesAux x (y:xs) | x==y = eliminarRepeticionesAux x xs
-                                 | otherwise = y: eliminarRepeticionesAux x xs-}
+                                 | otherwise = y: eliminarRepeticionesAux x xs-}-}
 
+
+--4)
+-- Función principal que encuentra la ciudad más conectada
+ciudadMasConectada :: AgenciaDeViajes -> Ciudad
+ciudadMasConectada agencia = mayorCantidadApariciones (aplanar agencia)
+
+-- Función auxiliar que aplana la lista de vuelos, juntando las ciudades en una sola lista
+aplanar :: AgenciaDeViajes -> [Ciudad]
+aplanar [] = []
+aplanar ((x1, x2, _):xs) = x1 : x2 : aplanar xs
+
+-- Función que devuelve la ciudad con más apariciones en la lista
+mayorCantidadApariciones :: [Ciudad] -> Ciudad
+mayorCantidadApariciones [x] = x 
+mayorCantidadApariciones (x:xs) = mayorCantidadAparicionesAux xs x 1  -- Comienza con la primera ciudad
+
+--cantidadApariciones cuenta la cantidad de veces que aparece una ciudad en la lista de ciudades resiltante de aplanar 
+cantidadApariciones :: Ciudad -> [Ciudad] -> Integer
+cantidadApariciones _ []  = 0
+cantidadApariciones n (x:xs)  | n==x = 1 + cantidadApariciones n xs
+                              | otherwise = cantidadApariciones n xs  
+
+-- Función auxiliar simplificada que recorre la lista de ciudades y encuentra la ciudad con más apariciones
+mayorCantidadAparicionesAux :: [Ciudad] -> Ciudad -> Integer -> Ciudad
+mayorCantidadAparicionesAux [] ciudadMaxima _ = ciudadMaxima  -- Retorna la ciudad con más apariciones
+mayorCantidadAparicionesAux (c:cs) ciudadMaxima maxApariciones -- maxApariciones comienza en 1
+  | apariciones == maxApariciones = mayorCantidadAparicionesAux cs ciudadMaxima maxApariciones  -- Si tienen las mismas apariciones, sigue comparando
+  | apariciones > maxApariciones = mayorCantidadAparicionesAux cs c apariciones  -- Si la ciudad c tiene más apariciones, la actualiza
+  | otherwise = mayorCantidadAparicionesAux cs ciudadMaxima maxApariciones  -- Si no, sigue con la ciudad actual
+  where apariciones = cantidadApariciones c (c:cs)  -- Cuenta cuántas veces aparece c en la lista

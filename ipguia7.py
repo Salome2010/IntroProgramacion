@@ -108,7 +108,7 @@ def pos_maximo(s:[int]) -> int: #pos_minimo se hace igual
             pos = i  # Actualizamos la posición del mayor
     return pos
     
-#res = pos_maximo([5,7,2,,7,8,8])
+#res = pos_maximo([5,7,2,7,8,8])
 #print(res)
 
 def lista_palabras(s:[str]) -> bool:
