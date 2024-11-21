@@ -112,8 +112,8 @@ def pos_maximo(s:[int]) -> int: #pos_minimo se hace igual
 #print(res)
 
 def lista_palabras(s:[str]) -> bool:
-    for palabra in s:
-        if(len(palabra)>7):
+    for i in range(len(s)):
+        if(len(s[i])>7):
             return True
     return False
 
@@ -141,8 +141,8 @@ def recorrer(s:[int])-> bool:
 
 def vocales_dist(palabra:str)-> bool:
     contador:int=0
-    for letra in palabra:
-        if (letra=="a" or letra=="A" or letra=="e" or letra=="E" or letra=="i" or letra=="I" or letra=="o" or letra=="O" or letra=="u" or letra=="U"):
+    for i in range(len(palabra)):
+        if (palabra[i]=="a" or palabra[i]=="A" or palabra[i]=="e" or palabra[i]=="E" or palabra[i]=="i" or palabra[i]=="I" or palabra[i]=="o" or palabra[i]=="O" or palabra[i]=="u" or palabra[i]=="U"):
             contador+=1
     return contador>=3
 
@@ -154,13 +154,10 @@ def vocales_dist(palabra:str)-> bool:
 def cantidad_digitos_impares(numeros:[int])-> int:
     contador:int=0
     lista:[int]=[]
-    for numero in numeros:
-        if numero==0:
-            contador+=1
-    for numero in numeros:
-        lista+=(str(numero))
-    for num in lista:
-        if(int(num)%2!=0):
+    for i in range(len(numeros)):
+        lista+=str(numeros[i])
+    for j in range(len(lista)):
+        if int(lista[j])%2==1:
             contador+=1
     return contador
         
@@ -227,10 +224,16 @@ def dar_vuelta_str(s:str) -> str:
 
 def eliminar_repetidos(s:str) -> str:
     sinRep:str=""
-    for letra in s:
-        if(letra not in sinRep):
-            sinRep+=letra
+    for i in range(len(s)):
+        if not pertenece(sinRep, s[i]):
+            sinRep+=s[i]
     return sinRep
+
+def pertenece(s:str, e:str) -> bool:
+    for i in range(len(s)):
+        if s[i]==e:
+            return True
+    return False
 
 #res = eliminar_repetidos("aasfdfs")
 #print(res)
@@ -275,11 +278,11 @@ def saldoPorHistorial(hist:[(str,int)]) -> int:
 
 #3)
 def pertenece_a_cada_uno_version_1(s:[[int]], e:int,resu:[bool]):
-    resu:[bool]=[]
-    for lista in s:
-        if pertenece(lista,e):
+    for i in range(len(s)):
+        if pertenece(s[i],e):
             resu.append(True)
-        resu.append(False)
+        else:
+            resu.append(False)
     return resu
    
 #res = pertenece_a_cada_uno_version_1([[1,2,3],[2,3,4],[5,7,8],[5],[]],5,[])
@@ -289,8 +292,8 @@ def pertenece_a_cada_uno_version_1(s:[[int]], e:int,resu:[bool]):
 
 def pertenece_a_cada_uno_version_3(s:[[int]], e:int) -> [bool]:
     resu:[bool]=[]
-    for lista in s:
-        if not(pertenece(lista,e)):
+    for i in range(len(s)):
+        if not(pertenece(s[i],e)):
             resu.append(False)
         else:
             resu.append(True)
@@ -317,9 +320,8 @@ def todasFilasMismasLong(matriz:[[int]])-> bool:
 #print(res)
 
 def filas_ordenadas(m:[[int]],resu:[bool]):
-    resu:[bool]=[]
-    for fila in m:
-        if (ordenados(fila)):
+    for i in range(len(m)):
+        if (ordenados(m[i])):
             resu.append(True)
         else:
             resu.append(False)
@@ -329,9 +331,11 @@ def filas_ordenadas(m:[[int]],resu:[bool]):
 #print(res)
 
 def columna(m:[[int]],c:int) -> [int]:
+    secuencia:[int]=[]
     for i in range(len(m)):
         if (i==c):
-            return m[i]
+            secuencia+=m[i]
+    return secuencia
 
 #res = columna([[1,2,3],[2,4,5],[4,7]],2)
 #print(res)

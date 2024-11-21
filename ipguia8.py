@@ -233,6 +233,7 @@ while not c.empty():
 def intercalarc(c1:Cola,c2:Cola) -> Cola:
     c = Cola()
     nuevaC= Cola()
+    # deberia volver a agregar los elementos a c1 y c2
     while not(c1.empty() and c2.empty()):
         elemento1=c1.get()
         elemento2=c2.get()
@@ -341,22 +342,23 @@ while not res.empty():
 
 #dicc
 
-#18) ver
-def agrupar_por_longitud(nombre_archivo: str) -> dict:
-    archivo=open(nombre_archivo, 'r', encoding='utf8')
-    diccionario={}
+#18) 
+def agrupar_por_longitud(nombre_archivo:str) -> dict:
+    archivo = open(nombre_archivo, "r", encoding='utf8')
+    dicc = {}
     for linea in archivo.readlines():
         palabra = ""
-        for caracter in linea:
-            if caracter != " " and caracter != "\n":
-                palabra += caracter
+        lista=str(linea)
+        for i in range(len(lista)):
+            if lista[i]!= " " and lista[i]!= "\n":
+                palabra+=lista[i]
             else:
                 if palabra:  # Verifica si hay una palabra almacenada
-                    diccionario[len(palabra)] = diccionario.get(len(palabra),0) +1 
+                    dicc[len(palabra)] = dicc.get(len(palabra),0) +1 
                     palabra=""
             
     archivo.close()               
-    return diccionario
+    return dicc
 
 """res = agrupar_por_longitud("hola_soy")
 print(res)"""

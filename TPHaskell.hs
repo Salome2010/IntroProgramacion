@@ -67,7 +67,7 @@ eliminarRepeticionesAux x (y:xs) | x==y = eliminarRepeticionesAux x xs
 
 
 --4)
--- Función principal que encuentra la ciudad más conectada
+{-- Función principal que encuentra la ciudad más conectada
 ciudadMasConectada :: AgenciaDeViajes -> Ciudad
 ciudadMasConectada agencia = mayorCantidadApariciones (aplanar agencia)
 
@@ -95,3 +95,35 @@ mayorCantidadAparicionesAux (c:cs) ciudadMaxima maxApariciones -- maxApariciones
   | apariciones > maxApariciones = mayorCantidadAparicionesAux cs c apariciones  -- Si la ciudad c tiene más apariciones, la actualiza
   | otherwise = mayorCantidadAparicionesAux cs ciudadMaxima maxApariciones  -- Si no, sigue con la ciudad actual
   where apariciones = cantidadApariciones c (c:cs)  -- Cuenta cuántas veces aparece c en la lista
+-}
+
+--4)
+ciudadMasConectada :: AgenciaDeViajes -> Ciudad
+ciudadMasConectada agencia = ciudadConMasConexiones agencia (obtenerCiudades agencia) ""
+
+obtenerCiudades :: AgenciaDeViajes -> [Ciudad]
+obtenerCiudades [] = []
+obtenerCiudades ((v1, v2, _):xs) = eliminarRepetidos [v1, v2] ++ obtenerCiudades xs
+
+perteneceCiudad ::  Ciudad -> [Ciudad] -> Bool
+perteneceCiudad  _ [] = False
+perteneceCiudad n (x:xs) | n==x = True
+                         | otherwise = perteneceCiudad n xs
+
+eliminarRepetidos :: [Ciudad] -> [Ciudad]
+eliminarRepetidos [] = []
+eliminarRepetidos (x:xs) | perteneceCiudad x xs = eliminarRepetidos xs
+                         | otherwise   = x : eliminarRepetidos xs
+
+contarConexiones :: AgenciaDeViajes -> Ciudad -> Int
+contarConexiones agencia ciudad = longitud (ciudadesConectadas agencia ciudad)
+
+ciudadConMasConexiones :: AgenciaDeViajes -> [Ciudad] -> Ciudad -> Ciudad
+ciudadConMasConexiones _ [] ciudadMax = ciudadMax
+ciudadConMasConexiones agencia (ciudad:ciudades) ciudadMax
+  | contarConexiones agencia ciudad > contarConexiones agencia ciudadMax = ciudadConMasConexiones agencia ciudades ciudad
+  | otherwise = ciudadConMasConexiones agencia ciudades ciudadMax
+
+longitud :: [a] -> Int
+longitud [] = 0
+longitud (_:xs) = 1 + longitud xs

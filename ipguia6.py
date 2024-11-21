@@ -118,6 +118,7 @@ def peso_pino(altura: int) -> int:
     else: 
         return 300*3 + ((altura - 300)*2)
 
+
 #res = peso_pino(700)
 #print(res)
 
