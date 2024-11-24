@@ -946,6 +946,39 @@ def productoYCantidad(empleado:str, historial:[(str,str,int)]) -> [(str,int)]:
 #res = gestion_ventas([("mica", "pantalon", 2),("salo", "pantalo", 1),("mica", "saco",1),("mica","camisa",3),("salo", "camisa", 2)])
 #print(res)
 
+# ultimos que hago. 
+# espero mañana sacar una nota mayor a 7 por favorrrr
+
+def contar_traducciones_iguales(ingles:dict, aleman:dict) -> int:
+    contador:int = 0
+    for claveI in ingles.keys():
+         for claveA in aleman.keys():
+            if claveI == claveA and ingles[claveI] == aleman[claveA]:
+                contador+=1
+    return contador
+
+
+"""aleman = {"Mano": "Hand", "Pie": "Fuss", "Dedo": "Finger", "Cara": "Gesicht"}
+inglés = {"Pie": "Foot", "Dedo": "Finger", "Mano": "Hand"}
+print(contar_traducciones_iguales(inglés, aleman))"""
+
+def convertir_a_diccionarioo(lista:[int]) -> dict:
+    dicc = {}
+    for i in range(len(lista)):
+        if not(pertenece(lista[i], list(dicc.keys()))):
+            dicc[lista[i]] = cantidadAparicioness(lista[i],lista)
+    return dicc
+
+def cantidadAparicioness(numero:int, numeros:[int]) -> int:
+    total:int = 0
+    for i in range(len(numeros)):
+        if numero == numeros[i]:
+            total+=1
+    return total
+
+"""res = convertir_a_diccionarioo([-1,0,4,100,100,-1,-1])
+print(res)""" 
+
 
 
 
