@@ -6,9 +6,9 @@ from queue import Queue as Cola
 def ultima_aparicion(s:[int], e:int) -> int:  #usando for
     ultimo:int=0
     for i in range(len(s)):
-        if e==s[i]:
-            ultimo=i
-    return ultimo 
+        if e == s[len(s)-1-i]:
+            return len(s)-1-i
+    
 
 def ultima_aparicion(s:[int], e:int) -> int: # usando while
     i:int=0
@@ -85,11 +85,11 @@ def ind_nesima_aparicion(s:[int], n:int, e:int) -> int:
     for i in range(len(s)):
         if s[i] == e:
             contador+=1
-            if contador ==n:
+            if contador >= n:
                 return i
     return -1
 
-#res = ind_nesima_aparicion([-1, 1, 1, 5, -7, 1, 3],2,1)
+#res = ind_nesima_aparicion([-1, 1, 1, 5, -7, 1, 3],3,1)
 #print(res)
 
 #2)
@@ -128,13 +128,17 @@ def posiciones(caballo:str, carreras:dict) -> [int]:
         longitud.append(resultado)
     
     resu:[int] = [0]* (len(longitud[0]))
-
-    for clave in carreras.keys():
+    for i in range(len(longitud)):
+        for j in range(len(longitud[i])):
+            if caballo == longitud[i][j]:
+                resu[j]+=1
+    return resu
+    """ otra forma luego de resu: ..
+     for clave in carreras.keys():
         if pertenece(caballo, carreras[clave]):
             resu[posicion(caballo, carreras[clave])]+=1
         else:
-            resu[posicion(caballo, carreras[clave])]+=0
-    return resu
+            resu[posicion(caballo, carreras[clave])]+=0"""
 
 def pertenece(caballo:str, nombres:[str]) -> bool:
     for i in range(len(nombres)):
@@ -160,36 +164,30 @@ def matriz_capicua(m:[[int]]) -> bool:
 
 def es_capicua(lista:[int]) -> bool:
     mitad: int = len(lista)//2
-    for i in range(0,mitad):
+    for i in range(len(lista)):
         if lista[i] != lista[len(lista)-1-i]:
             return False
     return True
-
+        
 #res = matriz_capicua([[1,2,2,1],[-5,6,6,-5],[0,1,1,0]])
 #print(res)
 
 ##### 12/06/2024
 
 #1) 
-def alarma_epidemiologica (registros:[(int, str)], infecciosas:[str], umbral: float) -> dict:
+def alarma_epidemiologica(registros:[(int,str)], infecciosas:[str], umbral:float) -> dict:
     dicc = {}
-    for i in range(len(registros)):
-        if pertenece(registros[i][1], infecciosas) and cantidad(registros[i][1], registros) >= umbral:
-            dicc[registros[i][1]] = (cantidad(registros[i][1], registros)) / len(registros)
+    for i in range(len(infecciosas)):
+        if not(pertenece(infecciosas[i],list(dicc.keys()))) and porcentaje(infecciosas[i], registros) >= umbral:
+            dicc[infecciosas[i]] = porcentaje(infecciosas[i], registros)
     return dicc
 
-def pertenece(enfermedad:str, enfermedades:[str]) -> bool:
-    for i in range(len(enfermedades)):
-        if enfermedad == enfermedades[i]:
-            return True
-    return False
-
-def cantidad(enfermedad:str, regist:[(int,str)]) -> int:
-    total:int = 0
-    for i in range(len(regist)):
-        if enfermedad == regist[i][1]:
-            total+=1
-    return total
+def porcentaje(enfermedad:str, historial:[(int,str)]) -> float:
+    cantidad:int = 0
+    for i in range(len(historial)):
+        if historial[i][1] == enfermedad:
+            cantidad+=1
+    return cantidad/len(historial)
 
 #res = alarma_epidemiologica([(3,"al"),(1,"bm"),(6,"ro"),(5,"fo"),(9,"al"),(2,"ro")],["ro","al","bm"],0.5)
 #print(res)
@@ -232,20 +230,21 @@ while not urgentes.empty():
 def nivel_de_ocupacion(camas_por_piso:[[bool]]) -> [float]:
     ocupadas:[float] = []
     for i in range(len(camas_por_piso)):
-        ocupadas.append((cantidad_camas(camas_por_piso[i]))/len(camas_por_piso[i]))
+        ocupadas.append(porcentajeOcupadas(camas_por_piso[i]))
     return ocupadas
 
-def cantidad_camas(piso:[bool]) -> int:
+def porcentajeOcupadas(piso:[bool]) -> float:
     total:int = 0
     for i in range(len(piso)):
         if piso[i] == True:
             total+=1
-    return total
+    porcentaje =  total / len(piso)
+    return porcentaje
 
 #res = nivel_de_ocupacion([[True, False, True],[False,True,True],[True,False,False],[True,True,True],[True,True,True],[False,False,False]])
 #print(res)
 
-#4) verr
+#4) 
 def empleados_del_mes(horas:dict) -> [int]:
     totasLasHoras:[[int]] = []
     max:int = 0
@@ -253,12 +252,12 @@ def empleados_del_mes(horas:dict) -> [int]:
     for id in horas.keys():
         totasLasHoras.append(horas[id])
     for i in range(len(totasLasHoras)):
-        if suma(totasLasHoras[i]) > max:
+        if suma(totasLasHoras[i]) >= max:
             max=i
         max
     claves = list(horas.keys())
     for i in range(len(claves)):
-        if i == max:
+        if i == max or suma(horas[claves[i]])>= suma(horas[claves[max]]):
             masHoras.append(claves[i])
     return masHoras
 
@@ -272,9 +271,10 @@ def suma(lista:[int]) -> int:
     1: [8, 9, 7, 8, 10],
     2: [9, 8, 9, 9, 9],
     3: [8, 8, 8, 8, 8],
-    4: [10, 9, 10, 10, 10],
+    4: [10, 10, 10, 10, 10],
     5: [],
-    6: [10, 9, 10, 10, 10]
+    6: [10, 9, 10, 10, 10],
+    7: [10,10,10,10,10]
 }
 
 print(empleados_del_mes(horas_trabajadas))"""
@@ -305,7 +305,7 @@ def verPromedio(valores:[int]) -> dict:
     if cantidadSalas not in dic.keys():
         dic[cantidadSalas] = promedio
     return dic
-    
+ 
 """r1 = {"agus": [0,21,3,61], "leo": [34,0,12,61]} #{"agus":(2,12.0), "leo":(2,23.0)}
 print(promedio_de_salidas(r1))
 r2 = {"agus": [0,21,3,61], "leo": [61,0,61,61]} #{"agus":(2,12.0), "leo":(0,0.0)}
@@ -315,7 +315,7 @@ r3 = {"agus": [0,61,13,12,45,34,12,61], "leo": [35,46,21,31,21,23,25,38,], "ale"
 print(promedio_de_salidas(r3))
 r4 = {"agus": [58,58,58,0,61,58], "leo": [0,0,0,0,61,54], "ale": [14,13,0,61,10,12]}
 # #{"agus":(4,58), "leo":(1,54), "ale":(4,12.25)}
-print(promedio_de_salidas(r4))   """
+print(promedio_de_salidas(r4))"""
 
 #2)
 def tiempo_mas_rapido(tiempo_salas:[int]) -> int:
@@ -331,7 +331,7 @@ def tiempo_mas_rapido(tiempo_salas:[int]) -> int:
 
 def primeroDistintodDe0(tiempos:[int]) -> int:
     for i in range(len(tiempos)):
-        if tiempos[i] != 0:
+        if 0<tiempos[i]<60:
             return tiempos[i]
 
 
@@ -362,14 +362,14 @@ def racha_mas_larga(tiempos:[int]) -> (int,int):
             longitud = 0
     return (indiceIn, indiceMax)
 
-#res = racha_mas_larga([0, 10, 15, 60, 20, 25, 0, 5, 50, 60, 0, 30, 45])
+#res = racha_mas_larga([0, 10, 15, 60, 20, 25, 0, 5, 50, 60, 40,40,30,0, 30, 45])
 #print(res)
 
 #4)
 def escape_en_solitario(amigos_por_sala:[[int]]) -> [int]:
     solo3:[int] = []
     for i in range(len(amigos_por_sala)):
-        if salaSoloFue3(amigos_por_sala[i]) and 0<amigos_por_sala[i][2]<=61:
+        if salaSoloFue3(amigos_por_sala[i]) and amigos_por_sala[i][2]!=0:
             solo3.append(i)
     return solo3
 
@@ -976,12 +976,231 @@ def cantidadAparicioness(numero:int, numeros:[int]) -> int:
             total+=1
     return total
 
+
 """res = convertir_a_diccionarioo([-1,0,4,100,100,-1,-1])
-print(res)""" 
+print(res)"""
 
+# mi parcial 
 
+#1) verr
+def subsecuencia_mas_larga(v: [int]) -> (int,int):
+    res: tuple[int,int] = (1,0)
+    for i in range(len(v)):
+        for j in range(i+1, len(v)):
+            if abs( v[j] - v[j-1] ) != 1:
+                break
+            longitud_actual = j - i + 1
+            if longitud_actual > res[0]:
+                res = (longitud_actual, i)
+    return res
 
+"""resu = subsecuencia_mas_larga([1,2,3,4,8,7,6,3,2,1,1,2,3,4,5,6])
+print(resu)"""
 
-    
-    
+#2)
+def mejor_resultado_de_ana(examenes:Cola) -> [int]:
+    res:[int] = []
+    colaAux = Cola()
+    while not examenes.empty():
+        examen = examenes.get()
+        colaAux.put(examen)
+        if cantidadBool(True,examen) == len(examen)//2 and cantidadBool(False,examen) == len(examen)//2:
+            res.append(len(examen))
+        elif cantidadBool(True,examen) < len(examen)//2 and cantidadBool(False,examen) > len(examen)//2:
+            suma =  cantidadBool(True,examen) + len(examen)//2
+            res.append(suma)
+        elif cantidadBool(False,examen) < len(examen)//2 and cantidadBool(True,examen) > len(examen)//2:
+            suma =  cantidadBool(False,examen) + len(examen)//2
+            res.append(suma)
+        elif cantidadBool(True,examen) > len(examen)//2:
+            res.append(len(examen)//2)
+        elif cantidadBool(False,examen) > len(examen)//2:
+            res.append(len(examen)//2)
+    while not colaAux.empty():
+        examen = colaAux.get()
+        examenes.put(examen)
+    return res
+
+def cantidadBool(n:bool, lista:[bool]) -> int:
+    total:int = 0
+    for i in range(len(lista)):
+        if lista[i] == n:
+            total+=1
+    return total
+
+"""examenes = Cola()
+examenes.put([True, True])
+res = mejor_resultado_de_ana(examenes)
+print(res)"""
         
+#4)
+def palabras_por_vocales(texto:str) -> dict:
+    dicc = {}
+    sinEspacios = []
+    palabra =""
+    for i in range(len(texto)):
+        if texto[i]!=" " and texto[i]!="\n":
+            palabra+=(texto[i])
+        else: 
+            if palabra:
+                sinEspacios.append(palabra)
+                palabra=""
+    sinEspacios.append(palabra)
+    for j in range(len(sinVacios(sinEspacios))):
+        if cantidadVocales(sinEspacios[j]) not in  list(dicc.keys()):
+            dicc[cantidadVocales(sinEspacios[j])] = cantidadPalabras(cantidadVocales(sinEspacios[j]), sinEspacios)
+    return dicc
+
+def sinVacios(lista:[str]) -> [str]:
+    res = []
+    for i in range(len(lista)):
+        if lista[i]!="":
+            res.append(lista[i])
+    return res
+
+
+def cantidadVocales(palabra:str) -> int:
+    total:int = 0
+    for i in range(len(palabra)):
+        if palabra[i] == 'a' or palabra[i] == 'e' or palabra[i] == 'i' or palabra[i] == 'o' or palabra[i] == 'u' or palabra[i] == 'A' or palabra[i] == 'E' or palabra[i] == 'I' or palabra[i] == 'O' or palabra[i] == 'U':
+            total+=1
+    return total   
+
+def cantidadPalabras(numero:int, palabras:[str]) -> int:
+    total:int = 0
+    for i in range(len(palabras)):
+        if numero == cantidadVocales(palabras[i]):
+            total+=1
+    return total
+
+
+#res = palabras_por_vocales(" a e  i F X i M W u")
+#print(res)
+
+
+#3) 
+def cambiar_matriz(A: [[int]]) -> None:
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            A[i][j] = (A[i][j] % maximo_elemento) + 1
+    
+"""A = [[1,2,3],[4,5,6]] 
+res = (cambiar_matriz(A))
+print(A)  """
+
+#turno noche
+#1)
+def multiplos_de_primos(v:[int]) -> dict:
+    dicc = {}
+    for i in range(len(v)):
+        if esPrimo(v[i]):
+            if v[i] not in list(dicc.keys()):
+                dicc[v[i]] = cantidadQueDivide(v[i],v)
+    return dicc
+
+def esPrimo(n:int) -> bool:
+    if n==1:
+        return False
+    if n==2 or n==3 or n==5 or n==7 :
+        return True
+    if n%2==0 or n%3==0 or n%5==0 or n%7==0:
+        return False
+    return True
+
+def cantidadQueDivide(n:int, lista:[int]) -> int:
+    total:int = 0
+    for i in range(len(lista)):
+        if lista[i]%n == 0:
+            total+=1
+    return total
+
+"""res = multiplos_de_primos(list(range(1, 101)))
+print(res)"""
+
+#2) verr
+def longitud_mas_larga(v:[[int]]) -> int:
+    longitudMax:int = 0
+    for i in range(len(v)):
+        if longitudUnos(v[i]) > longitudUnos(v[i+1]):
+            longitudMax = lonfitudUnos(v[i])
+        else:
+            longitudMax = lonfitudUnos(v[i+1])
+    return longitudMax
+
+def longitudUnos(lista:[int]) -> int:
+    res:int = 0
+    longitud_actual:int = 0
+    for i in range(len(lista)):
+        if lista[i] != 1:
+            break
+        longitud_actual+=1
+        if longitud_actual > res:
+            res = longitud_actual
+        longitud_actual = 0
+    return res
+
+
+#resu = longitudUnos([5,1,1,1,6,1,1,1,1,1]) 
+#print(resu)
+
+
+#3) verr
+def resolver_cuentas(p:Pila) -> [int]:
+    resultados:[int] = []
+    pilaAux1 = Pila()
+    pilaAux2 = Pila()
+    total:int = 0
+    while not p.empty():
+        operacion = p.get()
+        pilaAux1.put(operacion)
+        for i in range(len(operacion)-1):
+            if operacion[i] == "+":
+                total = int(operacion[i-1]) + int(operacion[i+1])
+            if operacion[i] == "-":
+                total =  int(operacion[i-1]) - int(operacion[i+1])
+        resultados.append(total)
+        total = 0
+    while not pilaAux1.empty():
+        operacion = pilaAux1.get()
+        pilaAux2.put(operacion)
+    while not pilaAux2.empty():
+        operacion = pilaAux2.get()
+        p.put(operacion)
+    return resultados
+
+p = Pila()
+p.put("2+4")
+p.put("-2+4")
+res = resolver_cuentas(p)
+print(res)
+
+#4)
+def dame_el_que_falta(s:[(int,int)]) -> (int,int):
+    lista:[(int,int)] = []
+    for i in range(len(s)):
+        if not(pertenece(s[i],lista)):
+            lista.append(s[i])
+        if not(pertenece(darVuelta(s[i]),lista)):
+            lista.append(darVuelta(s[i]))
+        if not(pertenece((s[i][0],s[i][0]),lista)):
+            lista.append((s[i][0],s[i][0]))
+        if not(pertenece((s[i][1],s[i][1]),lista)):
+            lista.append((s[i][1],s[i][1]))
+    for j in range(len(lista)):
+        if not(pertenece(lista[j],s)):
+            return lista[j]
+
+def pertenec(tupla:(int,int), tuplas:[(int,int)]) -> bool:
+    for i in range(len(tuplas)):
+        if tuplas[i] == tupla:
+            return True
+    return False
+
+def darVuelta(tupla:(int,int)) -> (int,int):
+    return (tupla[1],tupla[0])
+
+
+
+
+
+
