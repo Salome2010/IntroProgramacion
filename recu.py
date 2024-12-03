@@ -198,7 +198,7 @@ def quien_gano_el_tateti_facilito(tablero:[str]) -> int:
             if cantidad("X",tableroTraspuesto[i]) == len(tablero) and cantidad("O",tableroTraspuesto[j])<len(tablero):
                 return 1
             if cantidad("X",tableroTraspuesto[i]) == len(tablero) and cantidad("O",tableroTraspuesto[j]) == len(tablero):
-                return 1
+                return 3
     return 0 
 
 def cantidad(ficha:str, jugada:str) -> int:
@@ -469,6 +469,108 @@ def minimo(lista:[int]) -> int:
             min = lista[i]
     return min
 
+#)
+def mezclar(s1:[int], s2:[int]) -> [int]:
+    resu:[int] = []
+    cola1 = Cola()
+    cola2 = Cola()
+    for i in range(len(s1)):
+        cola1.put(s1[i])
+    for j in range(len(s2)):
+        cola2.put(s2[j])
+    while not cola1.empty() and not cola2.empty():
+        elemento1 = cola1.get()
+        elemento2 = cola2.get()
+        resu.append(elemento1)
+        resu.append(elemento2)
+    return resu
+
+#)
+def empleados_del_mes2(horas:dict) -> [int]:
+    resu:[int] = []
+    max:int = 0
+    for clave in horas.keys():
+        if suma(horas[clave]) > max:
+            max = suma(horas[clave])
+    for mismaClave in horas.keys():
+        if suma(horas[mismaClave]) == max:
+            resu.append(mismaClave)
+    return resu
+
+def suma(lista:[int]) -> int:
+    total:int = 0
+    for i in range(len(lista)):
+        total+=lista[i]
+    return total
+
+
+#)
+def verificar_transacciones2(s:str) -> int:
+    resultado = 350*(ap_antes_corte("r",s)) - 56*(ap_antes_corte("v",s))
+    for i in range(1,ap_antes_corte("v",s)):
+        if resultado<0:
+            resultado+=56
+    return resultado
+
+def ap_antes_corte(c:str, s:str) -> int:
+    total:int = 0
+    for i in range(len(s)):
+        if s[i] == c:
+            total+=1
+        if s[i] == "x":
+            return total
+    return total
+
+
+# tateti guia7
+def quien_gana_tateti_dificil(m:[str]) -> int:
+    traspuestaM = trasponerM(m)
+    diagonal = diagonalM(m)
+    for i in range(len(traspuestaM)):
+        if cantidadd("O",traspuestaM[i]) == len(traspuestaM) or cantidadd("O",diagonal[i]) == (len(diagonal)+1) :
+            return 0
+        elif cantidadd("X",traspuestaM[i]) == len(traspuestaM) or cantidadd("X",diagonal[i]) == (len(diagonal)+1):
+            return 1
+    return 2
+
+def cantidadd(c:str, palabra:str) -> int:
+    total:int = 0
+    for i in range(len(palabra)):
+        if palabra[i] == c :
+            total+=1
+    return total
+
+def trasponerM(caracteres:[str]) -> [str]:
+    traspuestas:[str] = []
+    palabra=""
+    n:int = 0
+    while n<len(caracteres):
+        for i in range(len(caracteres)):
+            palabra+=caracteres[i][n]
+        traspuestas.append(palabra)
+        palabra=""
+        n+=1
+    return traspuestas
+
+def diagonalM(caracteres:[str]) -> [str]:
+    diagonales:[str] = []
+    palabra=""
+    n:int = 0
+    while n< len(caracteres):
+        for i in range(len(caracteres)):
+            palabra+=caracteres[i][n]
+            n+=1
+        diagonales.append(palabra)
+        palabra=""
+    n = 2
+    while n>=0:
+        for j in range(len(caracteres)):
+            palabra+=caracteres[j][n]
+            n-=1
+        diagonales.append(palabra)
+    return diagonales
+
+
 #####################
 #21)
 def subsecuencia_mas_larga(v:[int]) -> (int,int):
@@ -638,4 +740,6 @@ def perteneceTupla(tupla:(int,int), lista:[(int,int)]) -> bool:
         if lista[i] == tupla:
             return True
     return False
+
+
 
