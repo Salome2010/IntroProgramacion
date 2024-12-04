@@ -652,6 +652,8 @@ def sinEspacios(texto:str) -> [str]:
             sinEspacio.append(palabras[j])
     return sinEspacio
 
+
+
 def cantidadVocales(palabra:str) -> int:
     total:int = 0
     for i in range(len(palabra)):
@@ -743,3 +745,24 @@ def perteneceTupla(tupla:(int,int), lista:[(int,int)]) -> bool:
 
 
 
+
+def sinEspacios2(texto:str) -> str:
+    palabras:[str] = []
+    cadaPalabra:str=""
+    palabraBienFormada:str=""
+    for i in range(len(texto)):
+        if texto[i]!=" " and texto[i]!="\n":
+            cadaPalabra+=(texto[i])
+        else:
+            palabras.append(cadaPalabra)
+            cadaPalabra=""
+    palabras.append(cadaPalabra)
+    for j in range(len(palabras)):
+        if j!=len(palabras) and palabras[j]!="":
+            palabraBienFormada+=(palabras[j]+" ")
+        else:
+            palabraBienFormada+=(palabras[j])
+    return palabraBienFormada
+
+#res = sinEspacios2("hola   como  estas  ma   ")
+#print(res)
